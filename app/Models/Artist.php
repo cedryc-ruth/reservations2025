@@ -10,6 +10,8 @@ class Artist extends Model
         'firstname',
         'lastname',
     ];
+
     protected $table = 'artists';
-    protected $timestamps = false;
+    
+    public $timestamps = false;
 }

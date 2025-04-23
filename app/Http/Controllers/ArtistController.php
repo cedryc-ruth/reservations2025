@@ -58,7 +58,13 @@ class ArtistController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        //Récupérer les données depuis le modèle (database)
+        $artist = Artist::find($id);
+
+        //Envoyer les données à la vue (template)
+        return view('artist.edit', [
+            'artist' => $artist,
+        ]);
     }
 
     /**
@@ -66,7 +72,19 @@ class ArtistController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'firstname' => 'required|max:60',
+            'lastname' => 'required|max:60',
+        ]);
+
+        $artist = Artist::find($id);
+
+        $artist->update($validated);
+
+        //Envoyer les données à la vue (template)
+        return view('artist.show', [
+            'artist' => $artist,
+        ]);
     }
 
     /**

@@ -7,7 +7,7 @@
 @if(count($artists)>0)
     <ul>
     @foreach($artists as $artist)
-        <li>{{ $artist->firstname }} {{ $artist->lastname }}</li>
+        <li><a href="{{ route('artist.show',[$artist->id]) }}">{{ $artist->firstname }} {{ $artist->lastname }}</a></li>
     @endforeach
     </ul>
 @else

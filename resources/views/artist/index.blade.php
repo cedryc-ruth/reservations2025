@@ -14,6 +14,8 @@
     <p>Aucun artiste.</p>
 @endif
 
+<p><a href="{{ route('artist.create') }}">Ajouter</a></p>
+
 @endsection
 
 @section('sidebar')

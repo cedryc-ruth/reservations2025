@@ -10,6 +10,7 @@ class Show extends Model
     protected $fillable = [
         'slug',
         'title',
+        'description',
         'poster_url',
         'location_id',
         'bookable',

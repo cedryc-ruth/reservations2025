@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\TypeController;
+use App\Http\Controllers\ShowController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,3 +23,6 @@ Route::get('/types', [TypeController::class, 'index'])->name('type.index');
 Route::get('/types/{id}', [TypeController::class, 'show'])->name('type.show');
 Route::get('/types/edit/{id}', [TypeController::class, 'edit'])->name('type.edit');
 Route::put('/types/{id}', [TypeController::class, 'update'])->name('type.update');
+
+Route::get('/shows', [ShowController::class, 'index'])->name('show.index');
+Route::get('/shows/{id}', [ShowController::class, 'show'])->name('show.show');

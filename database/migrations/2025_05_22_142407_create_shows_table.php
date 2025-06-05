@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('title');
             $table->string('poster_url');
-            $table->smallInteger('duration');
+            $table->integer('duration')->default(90);
             $table->year('created_in');
             $table->foreignId('location_id');
             $table->boolean('bookable');

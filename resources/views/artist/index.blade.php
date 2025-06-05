@@ -21,5 +21,5 @@
 @section('sidebar')
     @parent
 
-    SIDEBAR FILLE
+    SIDEBAR CHILD
 @endsection

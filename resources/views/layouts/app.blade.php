@@ -8,7 +8,7 @@
 <body>
     <aside>
     @section('sidebar')
-        This is the master sidebar.
+        This is the master sidebar
     @show
     </aside>
     <main>

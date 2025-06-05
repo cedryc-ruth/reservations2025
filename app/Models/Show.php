@@ -11,9 +11,12 @@ class Show extends Model
         'slug',
         'title',
         'poster_url',
+        'duration',
+        'created_in',
         'location_id',
         'bookable',
         'price',
+        'description',
     ];
 
     protected $table = 'shows';
@@ -25,4 +28,16 @@ class Show extends Model
         return $this->belongsToMany(ArtistType::class);
     }
 
+    /**
+     * Relation many-to-many avec Tag
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(\App\Models\Location::class);
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArtistController;
+use App\Http\Controllers\ShowController;
 use App\Http\Controllers\TypeController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,3 +23,12 @@ Route::get('/types', [TypeController::class, 'index'])->name('type.index');
 Route::get('/types/{id}', [TypeController::class, 'show'])->name('type.show');
 Route::get('/types/edit/{id}', [TypeController::class, 'edit'])->name('type.edit');
 Route::put('/types/{id}', [TypeController::class, 'update'])->name('type.update');
+
+Route::get('/shows', [ShowController::class, 'index'])->name('shows.index');
+Route::get('/shows/create', [ShowController::class, 'create'])->name('shows.create');
+Route::get('/shows/{id}', [ShowController::class, 'show'])->name('shows.show');
+Route::get('/shows/without-tag/{tag}', [ShowController::class, 'withoutTag'])->name('shows.withoutTag');
+Route::post('/shows/{id}/tags', [ShowController::class, 'addTags'])
+    ->middleware(['auth'])
+    ->name('shows.addTags');
+Route::post('/shows', [ShowController::class, 'store'])->name('shows.store');

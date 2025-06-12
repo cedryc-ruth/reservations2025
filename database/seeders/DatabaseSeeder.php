@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             PriceSeeder::class,
             LocalitySeeder::class,
             RoleSeeder::class,
+            LocationSeeder::class,
         ]);
     }
 }

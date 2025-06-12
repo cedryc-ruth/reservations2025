@@ -43,5 +43,9 @@ class Show extends Model
         return $this->belongsToMany(Price::class);
     }
 
-
+    public function representations() :HasMany
+    {
+        return $this->hasMany(Representation::class);
+    }
+  
 }

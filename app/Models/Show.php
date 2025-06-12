@@ -15,6 +15,7 @@ class Show extends Model
         'location_id',
         'bookable',
         'price',
+        'review',
     ];
 
     protected $table = 'shows';
@@ -24,6 +25,12 @@ class Show extends Model
     public function artistTypes() : BelongsToMany
     {
         return $this->belongsToMany(ArtistType::class);
+    }
+
+
+    public function review(): HasMany
+    {
+        return $this->hasMany(Review::class);
     }
 
 }

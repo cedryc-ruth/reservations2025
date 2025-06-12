@@ -24,4 +24,12 @@ class Location extends Model
     {
         return $this->belongsTo(Locality::class);
     }
+
+    /**
+     * Renvoie les spectacles créé dans ce lieu
+     */
+    public function shows(): HasMany
+    {
+        return $this->hasMany(Show::class);
+    }
 }

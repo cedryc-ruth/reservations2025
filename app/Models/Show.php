@@ -12,9 +12,10 @@ class Show extends Model
         'title',
         'description',
         'poster_url',
+        'duration',
+        'created_in',
         'location_id',
         'bookable',
-        'price',
     ];
 
     protected $table = 'shows';
@@ -25,5 +26,22 @@ class Show extends Model
     {
         return $this->belongsToMany(ArtistType::class);
     }
+
+    /**
+     * Renvoie le lieu de création du spectacle
+     */
+    public function location(): BelongsTo
+    {
+        return $this->belongsTo(Location::class);
+    }
+
+    /**
+     * Renvoie tous les tarifs d'un spectacle
+     */
+    public function prices(): BelongsToMany
+    {
+        return $this->belongsToMany(Price::class);
+    }
+
 
 }

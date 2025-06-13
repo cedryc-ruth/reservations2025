@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 
 class Price extends Model
 {
@@ -16,4 +18,12 @@ class Price extends Model
     protected $table = 'prices';
 
     public $timestamps = false;
+
+    /**
+     * Renvoie tous les spectacles pour lesquels ce tarif s'applique
+     */
+    public function shows(): BelongsToMany
+    {
+        return $this->belongsToMany(Show::class);
+    }
 }

@@ -4,19 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Show extends Model
 {
     protected $fillable = [
         'slug',
         'title',
+        'description',
         'poster_url',
         'duration',
         'created_in',
         'location_id',
         'bookable',
-        'price',
-        'description',
     ];
 
     protected $table = 'shows';
@@ -29,15 +29,24 @@ class Show extends Model
     }
 
     /**
-     * Relation many-to-many avec Tag
+     * Renvoie le lieu de création du spectacle
      */
-    public function tags()
+    public function location(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(Location::class);
     }
 
-    public function location()
+    /**
+     * Renvoie tous les tarifs d'un spectacle
+     */
+    public function prices(): BelongsToMany
     {
-        return $this->belongsTo(\App\Models\Location::class);
+        return $this->belongsToMany(Price::class);
     }
+
+    public function representations() :HasMany
+    {
+        return $this->hasMany(Representation::class);
+    }
+  
 }

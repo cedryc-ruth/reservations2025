@@ -32,3 +32,9 @@ Route::post('/shows/{id}/tags', [ShowController::class, 'addTags'])
     ->middleware(['auth'])
     ->name('shows.addTags');
 Route::post('/shows', [ShowController::class, 'store'])->name('shows.store');
+
+// Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->group(function () {
+//     Route::resource('artists', Admin\ArtistController::class);
+//     Route::resource('shows', Admin\ShowController::class);
+//     Route::resource('locations', Admin\LocationController::class);
+// });

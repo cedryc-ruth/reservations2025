@@ -6,7 +6,7 @@
             <button class="btn btn-outline-primary" type="submit">Rechercher</button>
         </div>
     </form>
-@section('title', 'Liste des spectacles')
+@section('title', 'Catalogue des spectacles')
 
     @if($tagQuery)
         <p><strong>{{ $shows->count() }}</strong> spectacle(s) trouvé(s) pour le mot-clé : <em>{{ $tagQuery }}</em></p>

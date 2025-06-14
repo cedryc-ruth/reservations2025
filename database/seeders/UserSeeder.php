@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
                 'langue'=>'en',
                 'login'=>'BobSull',
                 'email' => 'bob@sull.com',
-                'password' => '12345678',
+                'password' => bcrypt('12345678'),
             ],
             [
                 'firstname' => 'Lydia',
@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
                 'langue'=>'en',
                 'login'=>'Lydia25',
                 'email' => 'lydia@smith.com',
-                'password' => '12345678',
+                'password' => bcrypt('12345678'),
             ],
             [
                 'firstname' => 'Fred',
@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
                 'langue'=>'fr',
                 'login'=>'FCury',
                 'email' => 'fred@cury.com',
-                'password' => '12345678',
+                'password' => bcrypt('12345678'),
             ],
     
              [
@@ -50,7 +50,7 @@ class UserSeeder extends Seeder
                 'langue'=>'fr',
                 'login'=>'MarieDb',
                 'email' => 'marie@dubois.com',
-                'password' => '12345678',
+                'password' => bcrypt('12345678'),
             ],
              [
                 'firstname' => 'Martin',
@@ -58,7 +58,7 @@ class UserSeeder extends Seeder
                 'langue'=>'fr',
                 'login'=>'Mtho',
                 'email' => 'martin@thomas.com',
-                'password' => '12345678',
+                'password' => bcrypt('12345678'),
             ],
              [
                 'firstname' => 'Louise',
@@ -66,7 +66,7 @@ class UserSeeder extends Seeder
                 'langue'=>'nl',
                 'login'=>'Lou',
                 'email' => 'Louise@Desmet.com',
-                'password' => '12345678',
+                'password' => bcrypt('12345678'),
             ],
              [
                 'firstname' => 'Rafael',
@@ -74,7 +74,7 @@ class UserSeeder extends Seeder
                 'langue'=>'es',
                 'login'=>'rMar',
                 'email' => 'rafael@martinez.com',
-                'password' => '12345678',
+                'password' => bcrypt('12345678'),
             ],
              [
                 'firstname' => 'Thomas',
@@ -82,7 +82,7 @@ class UserSeeder extends Seeder
                 'langue'=>'fr',
                 'login'=>'thoamsp',
                 'email' => 'thhomas@petit.com',
-                'password' => '12345678',
+                'password' => bcrypt('12345678'),
             ], 
             [
                 'firstname' => 'Nowak',
@@ -90,7 +90,7 @@ class UserSeeder extends Seeder
                 'langue'=>'pl',
                 'login'=>'Noko',
                 'email' => 'nowak@kochanowski.com',
-                'password' => '12345678',
+                'password' => bcrypt('12345678'),
             ],
             [
                 'firstname' => 'Hamza',
@@ -98,7 +98,7 @@ class UserSeeder extends Seeder
                 'langue'=>'ar',
                 'login'=>'Hamza1003',
                 'email' => 'hamza@naim.com',
-                'password' => '12345678',
+                'password' => bcrypt('12345678'),
             ],
             [
                 'firstname' => 'Hanane',
@@ -106,7 +106,7 @@ class UserSeeder extends Seeder
                 'langue'=>'ar',
                 'login'=>'hanamar',
                 'email' => 'hanane@amar.com',
-                'password' => '12345678',
+                'password' => bcrypt('12345678'),
             ],
             [
                 'firstname' => 'Maeve',
@@ -114,7 +114,7 @@ class UserSeeder extends Seeder
                 'langue'=>'ir',
                 'login'=>'justKelly',
                 'email' => 'maeve@kelly.com',
-                'password' => '12345678',
+                'password' => bcrypt('12345678'),
             ],
             [
                 'firstname' => 'Niall',
@@ -122,7 +122,7 @@ class UserSeeder extends Seeder
                 'langue'=>'ir',
                 'login'=>'Ryan2025',
                 'email' => 'niall@ryan.com',
-                'password' => '12345678',
+                'password' => bcrypt('12345678'),
             ],
             
 

@@ -1,4 +1,4 @@
-@extends('layouts/app')
+@extends('layouts/main.blade.php')
 
 @section('title','Création d\'un artiste')
 

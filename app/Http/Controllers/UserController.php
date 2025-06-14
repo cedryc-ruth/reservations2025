@@ -87,7 +87,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'firstname' => 'required|max:60',
             'lastname' => 'required|max:60',
-            'langue' => 'required|max:2',
+            'langue' => 'max:2',
         ]);
         //Le formulaire a été validé, nous récupérons l’artiste à modifier
         $user = User::find($id);

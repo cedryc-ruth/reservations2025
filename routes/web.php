@@ -1,15 +1,27 @@
 <?php
 
 use App\Http\Controllers\ArtistController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\ShowController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
 Route::get('/artists', [ArtistController::class, 'index'])->name('artist.index');
 Route::get('/artists/{id}', [ArtistController::class, 'show'])
     ->where('id','[0-9]+')->name('artist.show');
@@ -29,10 +41,12 @@ Route::get('/shows', [ShowController::class, 'index'])->name('show.index');
 Route::get('/shows/{id}', [ShowController::class, 'show'])->name('show.show');
 
 Route::get('/users', [UserController::class, 'index'])->name('user.index');
-Route::get('/users/{id}', action: [UserController::class, 'show'])->where('id', '[0-9]+')->name('user.show');
+Route::get('/users/{id}', [UserController::class, 'show'])
+    ->where('id','[0-9]+')->name('user.show');
 Route::get('/users/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('user.update');
 Route::get('/users/create', [UserController::class, 'create'])->name('user.create');
 Route::post('/users', [UserController::class, 'store'])->name('user.store');
-Route::delete('/users/{id}', [UserController::class, 'destroy'])
+Route::delete('/user/{id}', [UserController::class, 'destroy'])
 	->where('id', '[0-9]+')->name('user.delete');
+    

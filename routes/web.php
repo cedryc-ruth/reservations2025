@@ -3,6 +3,9 @@
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\ShowController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\RepresentationReservationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,3 +29,15 @@ Route::put('/types/{id}', [TypeController::class, 'update'])->name('type.update'
 
 Route::get('/shows', [ShowController::class, 'index'])->name('show.index');
 Route::get('/shows/{id}', [ShowController::class, 'show'])->name('show.show');
+
+Route::get('/locations', [LocationController::class, 'index'])->name('location.index');
+Route::get('/locations/{id}', [LocationController::class, 'show'])
+    ->where('id','[0-9]+')->name('location.show');
+
+Route::get('/reservations', [ReservationController::class, 'index'])->name('reservation.index');
+Route::get('/reservations/{id}', [ReservationController::class, 'show'])
+    ->where('id','[0-9]+')->name('reservation.show');
+
+Route::get('/representation-reservations', [RepresentationReservationController::class, 'index'])->name('representation_reservation.index');
+Route::get('/representation-reservations/{id}', [RepresentationReservationController::class, 'show'])
+    ->where('id','[0-9]+')->name('representation_reservation.show');

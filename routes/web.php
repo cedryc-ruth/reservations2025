@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\ShowController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,3 +27,12 @@ Route::put('/types/{id}', [TypeController::class, 'update'])->name('type.update'
 
 Route::get('/shows', [ShowController::class, 'index'])->name('show.index');
 Route::get('/shows/{id}', [ShowController::class, 'show'])->name('show.show');
+
+Route::get('/users', [UserController::class, 'index'])->name('user.index');
+Route::get('/users/{id}', action: [UserController::class, 'show'])->where('id', '[0-9]+')->name('user.show');
+Route::get('/users/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+Route::put('/users/{id}', [UserController::class, 'update'])->name('user.update');
+Route::get('/users/create', [UserController::class, 'create'])->name('user.create');
+Route::post('/users', [UserController::class, 'store'])->name('user.store');
+Route::delete('/users/{id}', [UserController::class, 'destroy'])
+	->where('id', '[0-9]+')->name('user.delete');

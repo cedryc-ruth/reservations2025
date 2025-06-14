@@ -3,24 +3,23 @@
 @section('title', 'Liste des utilisateurs')
 
 @section('content')
-    <h1>Liste des {{ $resource }}</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Firstname</th>
-                <th>Lastname</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach($users as $user)
-            <tr>
-                <td>{{ $user->firstname }}</td>
-                <td>
-                    <a href="{{ route('user.show', $user->id) }}">{{ $user->lastname }}</a>
-                </td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
+@if(count($users)>0)
+    <ul>
+    @foreach($users as $user)
+        <li><a href="{{ route('user.show',[$user->id]) }}">{{ $user->firstname }} {{ $user->lastname }}</a></li>
+    @endforeach
+    </ul>
+@else
+    <p>Aucun utilisateur.</p>
+@endif
+
+<p><a href="{{ route('user.create') }}">Ajouter</a></p>
+
+@endsection
+
+@section('sidebar')
+    @parent
+
+    SIDEBAR FILLE
 @endsection

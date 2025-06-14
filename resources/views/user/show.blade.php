@@ -1,8 +1,22 @@
 @extends('layouts.app')
 
-@section('title', 'Fiche d\'un utilisateur')
+@section('title', 'Fiche utilisateur')
 
 @section('content')
-    <h1>{{ $user->firstname }} {{ $user->lastname }}</h1>
-    <nav><a href="{{ route('user.index') }}">Retour à l'index</a></nav>
+
+<p>{{ $user->firstname }} {{ $user->lastname }}</p>
+
+<p>{{$user->langue}}</p>
+
+
+
+<p><a href="{{ route('user.edit',[$user->id]) }}">Modifier</a></p>
+
+<form method="post" action="{{ route('user.delete', $user->id) }}">
+    @csrf
+    @method('DELETE')
+    <button>Supprimer</button>
+</form>
+
+<p><a href="{{ route('user.index') }}">Retour à la liste</a></p>
 @endsection

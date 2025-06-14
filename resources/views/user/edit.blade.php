@@ -9,7 +9,7 @@
     @csrf
     @method('PUT')
     <div>
-        <label for="firstname">Firstname</label>
+        <label for="firstname">Prénom</label>
         <input type="text" name="firstname" id="firstname" required 
     @if(old('firstname'))
         value="{{ old('firstname') }}"
@@ -22,7 +22,7 @@
     </div>
 
     <div>
-        <label for="lastname">Lastname</label>
+        <label for="lastname">Nom de famille</label>
         <input type="text" name="lastname" id="lastname" required
     @if(old('lastname'))
         value="{{ old('lastname') }}"
@@ -48,4 +48,5 @@
     @endif
 
 </form>
+<nav><a href="{{ route('artist.index') }}">Retour à l'index</a></nav>
 @endsection()

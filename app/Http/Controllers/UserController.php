@@ -24,7 +24,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('user.create');
     }
 
     /**
@@ -32,7 +32,22 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'firstname' => 'required|max:60',
+            'lastname' => 'required|max:60',
+        ]);
+        //Le formulaire a été validé, nous créons un nouvel utilisateur  à insérer
+        $user = new User();
+
+        //Assignation des données et sauvegarde dans la base de données
+        $user->firstname = $validated['firstname'];
+        $user->lastname = $validated['lastname'];
+
+        $user->save();
+
+        return redirect()->route('user.index');
+
+
     }
 
     /**
@@ -53,15 +68,38 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::find($id);
+        
+        return view('user.edit',[
+                    'user' => $user,
+        ]);
     }
+
+
+ 
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        //Validation des données du formulaire
+        $validated = $request->validate([
+            'firstname' => 'required|max:60',
+            'lastname' => 'required|max:60',
+            'langue' => 'required|max:2',
+        ]);
+        //Le formulaire a été validé, nous récupérons l’artiste à modifier
+        $user = User::find($id);
+
+	   //Mise à jour des données modifiées et sauvegarde dans la base de données
+        $user->update($validated);
+
+        return view('user.show',[
+            'user' => $user,
+        ]);
+
+
     }
 
     /**
@@ -71,4 +109,5 @@ class UserController extends Controller
     {
         //
     }
+   
 }

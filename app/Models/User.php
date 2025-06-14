@@ -22,6 +22,7 @@ class User extends Authenticatable
         'firstname',
         'lastname',
         'email',
+        'login',
         'langue',
         'password',
     ];
@@ -48,6 +49,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'users';
+    public $timestamps = false;
+
 
     /**
      * Get the reservations of the user.

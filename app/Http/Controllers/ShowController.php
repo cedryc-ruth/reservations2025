@@ -41,7 +41,7 @@ class ShowController extends Controller
     public function show(string $id)
     {
         //Récupérer les données depuis le modèle (database)
-        $show = Show::find($id);
+        $show = Show::findOrFail($id);
 
         //Envoyer les données à la vue (template)
         return view('show.show', [

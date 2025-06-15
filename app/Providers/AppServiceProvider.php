@@ -34,13 +34,13 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         $this->registerPolicies();
-        Gate::define('create-artist',function(User $user)){
+        Gate::define('create-artist',function(User $user){
             return $user->role ==='admin';
         });
-         Gate::define('update-artist',function(User $user)){
+         Gate::define('update-artist',function(User $user){
             return $user->role ==='admin';
         });
-         Gate::define('delete-artist',function(User $user)){
+         Gate::define('delete-artist',function(User $user){
             return $user->role ==='admin';
         });
     }

@@ -42,7 +42,8 @@ class ReservationController extends Controller
     {
         $reservation = Reservation::with([
             'user',
-            'representationReservations.representation'
+            'representationReservations.representation.show',
+            'representationReservations.price'
         ])->findOrFail($id);
 
         return view('reservation.show', [

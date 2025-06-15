@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Show extends Model
 {
@@ -22,9 +23,9 @@ class Show extends Model
     
     public $timestamps = false;
 
-    public function artistTypes() : BelongsToMany
+    public function artistTypes() : BelongsTo
     {
-        return $this->belongsToMany(ArtistType::class);
+        return $this->belongsTo(ArtistType::class);
     }
 
     /**
@@ -38,9 +39,9 @@ class Show extends Model
     /**
      * Renvoie tous les tarifs d'un spectacle
      */
-    public function prices(): BelongsToMany
+    public function prices(): BelongsTo
     {
-        return $this->belongsToMany(Price::class);
+        return $this->belongsTo(Price::class);
     }
 
     public function representations() :HasMany

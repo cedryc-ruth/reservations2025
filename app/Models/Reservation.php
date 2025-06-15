@@ -26,4 +26,14 @@ class Reservation extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function representationReservations()
+    {
+        return $this->hasMany(RepresentationReservation::class);
+    }
+
+    public function representations()
+    {
+        return $this->hasManyThrough(Representation::class, RepresentationReservation::class, 'reservation_id', 'id', 'id', 'representation_id');
+    }
 }

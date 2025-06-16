@@ -36,4 +36,9 @@ class Reservation extends Model
     {
         return $this->hasManyThrough(Representation::class, RepresentationReservation::class, 'reservation_id', 'id', 'id', 'representation_id');
     }
+
+    public function type()
+    {
+        return $this->belongsTo(Type::class);
+    }
 }

@@ -30,7 +30,9 @@ class ShowResource extends Resource
                 ->required()
                 ->maxLength(255),
 
-            Forms\Components\Textarea::make('description'),
+            Forms\Components\Textarea::make('description')
+                ->required()
+                ->columnSpanFull(),
 
             Forms\Components\TextInput::make('poster_url')
                 ->label('Affiche (URL)')

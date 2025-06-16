@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Representation extends Model
@@ -23,14 +24,14 @@ class Representation extends Model
         return $this->belongsToMany(ArtistType::class);
     }
 
-    public function show(): BelongsToMany
+    public function show(): BelongsTo
     {
-        return $this->belongsToMany(show::class);
+        return $this->belongsTo(show::class);
     }
 
-    public function location(): BelongsToMany
+    public function location(): BelongsTo
     {
-        return $this->belongsToMany(Location::class);
+        return $this->belongsTo(Location::class);
     }
 
     public function representationReservations(): HasMany

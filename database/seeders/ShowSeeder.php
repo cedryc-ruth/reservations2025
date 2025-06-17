@@ -12,7 +12,7 @@ class ShowSeeder extends Seeder
         Show::create([
             'slug' => 'romeo-juliette',
             'title' => 'Roméo et Juliette',
-            'description' => 'Deux ados, trois échanges, un mariage, cinq morts. Une pub tragique pour l’amour instantané; écrit avant l’invention du cerveau préfrontal.',
+            'description' => 'Deux ados, trois échanges, un mariage, cinq morts. Une pub tragique pour l’amour instantané, écrit avant l’invention du cerveau préfrontal.',
             'poster_url' => '#',
             'duration' => 120,
             'created_in' => 2003,
@@ -23,7 +23,7 @@ class ShowSeeder extends Seeder
         Show::create([
             'slug' => 'cyrano-bergerac',
             'title' => 'Cyrano de Bergerac',
-            'description' => 'Un poète guerrier au nez intersidéral préfère écrire des lettres d’amour pour un autre plutôt que d’utiliser son propre charisme; parce que c’est plus noble de souffrir en alexandrins.',
+            'description' => 'Un poète guerrier au nez intersidéral préfère écrire des lettres d’amour pour un autre plutôt que d’utiliser son propre charisme, parce que c’est plus noble de souffrir en alexandrins.',
             'poster_url' => '#',
             'duration' => 135,
             'created_in' => 2010,

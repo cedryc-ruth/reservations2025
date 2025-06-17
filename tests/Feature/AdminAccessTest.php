@@ -49,6 +49,6 @@ class AdminAccessTest extends TestCase
 
         dump($response->headers->get('Location'));
 
-        $response->assertRedirect('/admin/login');
+        $response->assertRedirect('/login');
     }
 }

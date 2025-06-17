@@ -10,13 +10,23 @@ class ShowController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $shows = Show::all();
+        // Je crée une requête de base
+    $query = Show::query();
 
-        return view('show.index',[
-            'shows' => $shows,
-        ]);
+    // Si il y a une recherche, je filtre
+    if ($request->has('search') && !empty($request->search)) {
+        $query->where('title', 'like', '%' . $request->search . '%');
+    }
+
+    // Je récupère les résultats (avec ou sans filtre)
+    $shows = $query->get();
+
+    // Je retourne la vue avec les données
+    return view('show.index', [
+        'shows' => $shows,
+    ]);
     }
 
     /**

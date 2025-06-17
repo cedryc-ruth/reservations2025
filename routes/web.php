@@ -9,6 +9,7 @@ use App\Http\Controllers\ShowController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RepresentationReservationController;
+use App\Http\Controllers\ReviewController;
 
 // Page d'accueil user/frontend
 Route::get('/', function () {
@@ -65,3 +66,7 @@ Route::get('/representation-reservations', [RepresentationReservationController:
 Route::get('/representation-reservations/{id}', [RepresentationReservationController::class, 'show'])
     ->where('id','[0-9]+')->name('representation_reservation.show');
     // TODO edit/store/delete si nécessaire
+
+
+// REVIEW 
+Route::get('/shows/{show}/reviews', [ReviewController::class, 'index']);

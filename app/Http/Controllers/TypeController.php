@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Type;
+use Doctrine\DBAL\Types\TypeRegistry;
 use Illuminate\Http\Request;
 
 class TypeController extends Controller
@@ -24,7 +25,7 @@ class TypeController extends Controller
      */
     public function create()
     {
-        //
+        return view('type.create');
     }
 
     /**
@@ -32,7 +33,13 @@ class TypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'type' => 'required|max:60',
+        ]);
+        $type = new Type();
+        $type->$validated['type'];
+        $type->save();
+        return redirect()->route('type.show',[$type->id]);
     }
 
     /**
@@ -52,7 +59,12 @@ class TypeController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $type = Type::find($id);
+
+        //Envoyer les données à la vue (template)
+        return view('type.edit', [
+            'type' => $type,
+        ]);
     }
 
     /**
@@ -60,14 +72,34 @@ class TypeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'type' => 'required|max:60',
+        ]);
+
+        $type = Type::find($id);
+
+        $type->update($validated);
+
+        
+        //Envoyer les données à la vue (template)
+        return view('type.show', [
+            'type' => $type,
+        ]);
     }
+    
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        
+        $type = Type::find($id);
+
+        if($type) {
+            $type->delete();
+        }
+
+        return redirect()->route('type.index');
     }
 }

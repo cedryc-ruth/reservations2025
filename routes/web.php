@@ -1,14 +1,31 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Filament\Facades\Filament;
+
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\ShowController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\RepresentationReservationController;
 
+// Page d'accueil user/frontend
 Route::get('/', function () {
     return view('welcome');
 });
 
+// Redirection pour éviter "Route [login] not defined"
+Route::get('/login', function () {
+    return redirect('/admin/login');
+})->name('login');
+
+// DEBUG PANEL - test des resources filament
+Route::get('/debug-panels', function () {
+    return Filament::getPanel('admin')->getResources();
+});
+
+// ARTISTS
 Route::get('/artists', [ArtistController::class, 'index'])->name('artist.index');
 Route::get('/artists/{id}', [ArtistController::class, 'show'])
     ->where('id','[0-9]+')->name('artist.show');
@@ -19,10 +36,32 @@ Route::post('/artists', [ArtistController::class, 'store'])->name('artist.store'
 Route::delete('/artist/{id}', [ArtistController::class, 'destroy'])
 	->where('id', '[0-9]+')->name('artist.delete');
 
+// TYPES
 Route::get('/types', [TypeController::class, 'index'])->name('type.index');
 Route::get('/types/{id}', [TypeController::class, 'show'])->name('type.show');
 Route::get('/types/edit/{id}', [TypeController::class, 'edit'])->name('type.edit');
 Route::put('/types/{id}', [TypeController::class, 'update'])->name('type.update');
+    // TODO store/create/delete
 
+// SHOWS
 Route::get('/shows', [ShowController::class, 'index'])->name('show.index');
 Route::get('/shows/{id}', [ShowController::class, 'show'])->name('show.show');
+    // TODO edit/create/delete si nécessaire
+
+// LOCATIONS
+Route::get('/locations', [LocationController::class, 'index'])->name('location.index');
+Route::get('/locations/{id}', [LocationController::class, 'show'])
+    ->where('id','[0-9]+')->name('location.show');
+    // TODO create/edit/delete/update si nécessaire
+
+// RESERVATIONS
+Route::get('/reservations', [ReservationController::class, 'index'])->name('reservation.index');
+Route::get('/reservations/{id}', [ReservationController::class, 'show'])
+    ->where('id','[0-9]+')->name('reservation.show');
+    // TODO create/store/delete si nécessaire
+
+// REPRESENTATION - RESERVATION
+Route::get('/representation-reservations', [RepresentationReservationController::class, 'index'])->name('representation_reservation.index');
+Route::get('/representation-reservations/{id}', [RepresentationReservationController::class, 'show'])
+    ->where('id','[0-9]+')->name('representation_reservation.show');
+    // TODO edit/store/delete si nécessaire

@@ -24,9 +24,9 @@ class Show extends Model
     
     public $timestamps = false;
 
-    public function artistTypes() : BelongsToMany
+    public function artistTypes() : BelongsTo
     {
-        return $this->belongsToMany(ArtistType::class);
+        return $this->belongsTo(ArtistType::class);
     }
 
     /**
@@ -40,9 +40,9 @@ class Show extends Model
     /**
      * Renvoie tous les tarifs d'un spectacle
      */
-    public function prices(): BelongsToMany
+    public function prices(): BelongsTo
     {
-        return $this->belongsToMany(Price::class);
+        return $this->belongsTo(Price::class);
     }
 
     public function representations() :HasMany

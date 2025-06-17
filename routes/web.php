@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Filament\Facades\Filament;
 
@@ -15,10 +16,22 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Redirection pour éviter "Route [login] not defined"
+// Redirection login Laravel vers admin login Filament (si utilisé)
 Route::get('/login', function () {
     return redirect('/admin/login');
 })->name('login');
+
+// Tableau de bord (Breeze)
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+// Gestion du profil (Breeze)
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
 // DEBUG PANEL - test des resources filament
 Route::get('/debug-panels', function () {
@@ -34,34 +47,37 @@ Route::put('/artists/{id}', [ArtistController::class, 'update'])->name('artist.u
 Route::get('/artists/create', [ArtistController::class, 'create'])->name('artist.create');
 Route::post('/artists', [ArtistController::class, 'store'])->name('artist.store');
 Route::delete('/artist/{id}', [ArtistController::class, 'destroy'])
-	->where('id', '[0-9]+')->name('artist.delete');
+    ->where('id', '[0-9]+')->name('artist.delete');
 
 // TYPES
 Route::get('/types', [TypeController::class, 'index'])->name('type.index');
 Route::get('/types/{id}', [TypeController::class, 'show'])->name('type.show');
 Route::get('/types/edit/{id}', [TypeController::class, 'edit'])->name('type.edit');
 Route::put('/types/{id}', [TypeController::class, 'update'])->name('type.update');
-    // TODO store/create/delete
+// TODO store/create/delete
 
 // SHOWS
 Route::get('/shows', [ShowController::class, 'index'])->name('show.index');
 Route::get('/shows/{id}', [ShowController::class, 'show'])->name('show.show');
-    // TODO edit/create/delete si nécessaire
+// TODO edit/create/delete si nécessaire
 
 // LOCATIONS
 Route::get('/locations', [LocationController::class, 'index'])->name('location.index');
 Route::get('/locations/{id}', [LocationController::class, 'show'])
     ->where('id','[0-9]+')->name('location.show');
-    // TODO create/edit/delete/update si nécessaire
+// TODO create/edit/delete/update si nécessaire
 
 // RESERVATIONS
 Route::get('/reservations', [ReservationController::class, 'index'])->name('reservation.index');
 Route::get('/reservations/{id}', [ReservationController::class, 'show'])
     ->where('id','[0-9]+')->name('reservation.show');
-    // TODO create/store/delete si nécessaire
+// TODO create/store/delete si nécessaire
 
 // REPRESENTATION - RESERVATION
 Route::get('/representation-reservations', [RepresentationReservationController::class, 'index'])->name('representation_reservation.index');
 Route::get('/representation-reservations/{id}', [RepresentationReservationController::class, 'show'])
     ->where('id','[0-9]+')->name('representation_reservation.show');
-    // TODO edit/store/delete si nécessaire
+// TODO edit/store/delete si nécessaire
+
+// Authentification Laravel Breeze
+require __DIR__.'/auth.php';

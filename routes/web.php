@@ -2,13 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 use Filament\Facades\Filament;
-
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\ShowController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RepresentationReservationController;
+use App\Models\User;
+use App\Models\Reservation;
+use App\Models\Show;
+use App\Models\Representation;
+use App\Models\Location;
 
 // Page d'accueil user/frontend
 Route::get('/', function () {
@@ -65,3 +71,46 @@ Route::get('/representation-reservations', [RepresentationReservationController:
 Route::get('/representation-reservations/{id}', [RepresentationReservationController::class, 'show'])
     ->where('id','[0-9]+')->name('representation_reservation.show');
     // TODO edit/store/delete si nécessaire
+
+// ROUTE D'EXPORT CSV - TOUT RESERVATION - BACKOFFICE
+Route::get('/admin/export/all', function () {
+    $resources = [
+        'USERS' => User::all(),
+        'RESERVATIONS' => Reservation::all(),
+        'SHOWS' => Show::all(),
+        'REPRESENTATIONS' => Representation::all(),
+        'LOCATIONS' => Location::all(),
+    ];
+
+    $headers = [
+        'Content-Type' => 'text/csv; charset=UTF-8',
+        'Content-Disposition' => 'attachment; filename="export_complet.csv"',
+    ];
+
+    return Response::stream(function () use ($resources) {
+        echo "\xEF\xBB\xBF"; // UTF-8 BOM pour Excel
+
+        $handle = fopen('php://output', 'w');
+
+        foreach ($resources as $title => $collection) {
+            fputcsv($handle, ["== $title =="]);
+
+            if ($collection->isEmpty()) {
+                fputcsv($handle, ['(aucune donnée)']);
+                continue;
+            }
+
+            // En-têtes dynamiques
+            fputcsv($handle, array_keys($collection->first()->getAttributes()), ';');
+
+            foreach ($collection as $item) {
+                fputcsv($handle, $item->toArray(), ';');
+            }
+
+            // Ligne vide
+            fputcsv($handle, ['']);
+        }
+
+        fclose($handle);
+    }, 200, $headers);
+});

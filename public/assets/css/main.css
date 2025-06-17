@@ -151,7 +151,7 @@ input, select, textarea {
 
 		a:hover {
 			border-bottom-color: transparent;
-			color: #f2849e !important;
+			color: #ffacbf !important;
 		}
 
 	strong, b {
@@ -2572,7 +2572,7 @@ input, select, textarea {
 		-webkit-flex-wrap: wrap;
 		-ms-flex-wrap: wrap;
 		flex-wrap: wrap;
-		postiion: relative;
+		position: relative;
 		margin: -2.5em 0 0 -2.5em;
 	}
 
@@ -2829,19 +2829,24 @@ input, select, textarea {
 /* Header */
 
 	#header {
+		background: url('/images/header.jpg') center center no-repeat;
+		background-size: cover;
+		flex-direction: column;
+		align-items: flex-start;
+		color: white;
 		padding: 8em 0 0.1em 0 ;
 	}
 
 		#header .logo {
-			display: block;
-			border-bottom: 0;
-			color: inherit;
-			font-weight: 900;
-			letter-spacing: 0.35em;
-			margin: 0 0 2.5em 0;
+			display: inline-flex;
+			align-items: center;
+			gap: 0.75em;
 			text-decoration: none;
-			text-transform: uppercase;
-			display: inline-block;
+			color: inherit;
+			background-color: rgba(255, 180, 180, 0.5);
+			border-radius: 6px;
+			padding: 0.5em 1em;
+			max-width: fit-content;
 		}
 
 			#header .logo > * {
@@ -2857,6 +2862,28 @@ input, select, textarea {
 					display: block;
 					width: 2em;
 					height: 2em;
+				}
+
+				#header .logo .text {
+					display: flex;
+					flex-direction: column;
+					line-height: 1.2;
+				}
+
+				#header .logo .title {
+					font-size: 1.4em;
+					font-weight: 900;
+					letter-spacing: 0.25em;
+					text-transform: uppercase;
+				}
+
+				#header .logo .subtitle {
+					font-size: 1em;
+					font-weight: bold;
+					text-transform: none;
+					margin-top: 0.2em;
+					color: #483f3f;
+					margin-top: 0.1em;
 				}
 
 		#header nav {
@@ -3151,13 +3178,15 @@ input, select, textarea {
 /* Main */
 
 	#main {
-		padding: 0em 0 6em 0 ;
+		padding: 2rem;
+		max-width: 960px;
+		margin: 0 auto;
 	}
 
 		@media screen and (max-width: 736px) {
 
 			#main {
-				padding: 0em 0 4em 0 ;
+				padding: 1rem;
 			}
 
 		}

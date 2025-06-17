@@ -4,6 +4,7 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
+
 <html>
 	<head>
         <title>Projet Réservations :: @yield('title')</title>
@@ -22,8 +23,14 @@
 
 							<!-- Logo -->
 								<a href="index.html" class="logo">
-									<span class="symbol"><img src="images/logo.svg" alt="" /></span><span class="title">Phantom</span>
-								</a>
+								<span class="symbol">
+									<img src="{{ asset('images/logo.svg') }}" alt="Logo" />
+								</span>
+								<span class="text">
+									<span class="title">Mon billet</span>
+									<span class="subtitle">Théâtre & Spectacles</span>
+								</span>
+							</a>
 
 							<!-- Nav -->
 								<nav>
@@ -92,13 +99,17 @@
 			<script src="{{ asset('assets/js/breakpoints.min.js') }}"></script>
 			<script src="{{ asset('assets/js/util.js') }}"></script>
 			<script src="{{ asset('assets/js/main.js') }}"></script>
-
+	<script>
+			window.addEventListener('load', function() {
+				document.body.classList.remove('is-preload');
+			});
+		</script>
 	</body>
 </html>
 
 
 </head>
-<body>
+<!-- <body>
     <aside>
     @section('sidebar')
         This is the master sidebar.
@@ -107,5 +118,5 @@
     <main>
         @yield('content')
     </main>
-</body>
+</body> -->
 </html>

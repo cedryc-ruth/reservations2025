@@ -12,12 +12,12 @@
     @foreach($shows as $show)
         <article class="style{{ $loop->iteration % 6 + 1}}">
             <span class="image">
-                <img src="{{ asset('images/'.$show->poster_url) }}" alt="{{ $show->title }}" />
+                <img src="{{ asset('images/' . $show->poster_url) }}" alt="{{ $show->title }}" />
             </span>
             <a href="{{ route('show.show',[$show->id]) }}">
-                <h2>{{ $show->title }}</h2>
+                <h2>{{ strtoupper($show->title) }}</h2>
                 <div class="content">
-                    <p>{{ $show->description }}</p>
+                    <p>{{ Str::limit($show->description, 120, '...') }}</p>
                 </div>
             </a>
         </article>

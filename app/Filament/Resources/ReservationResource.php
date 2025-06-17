@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -53,6 +54,12 @@ class ReservationResource extends Resource
             Tables\Columns\TextColumn::make('user.id')->label('Matricule'),
             Tables\Columns\TextColumn::make('booking_date')->label('Date')->dateTime('d/m/Y H:i'),
             Tables\Columns\TextColumn::make('status')->label('Statut'),
+        ])
+        ->headerActions([
+            Action::make('export')
+                ->label('Exporter CSV')
+                ->url('/admin/export/reservations')
+                ->openUrlInNewTab(),
         ])
         ->actions([
             Tables\Actions\EditAction::make(),

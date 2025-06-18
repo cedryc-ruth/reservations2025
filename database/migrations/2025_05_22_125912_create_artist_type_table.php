@@ -6,26 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('artist_type', function (Blueprint $table) {
+            // Clé primaire automatique
             $table->id();
-            $table->foreignId('artist_id');
-            $table->foreignId('type_id');
 
-            $table->foreign('artist_id')->references('id')->on('artists')
-                ->onDelete('restrict')->onUpdate('cascade');
-            $table->foreign('type_id')->references('id')->on('types')
-                ->onDelete('restrict')->onUpdate('cascade');
+            // Clés étrangères
+            $table->foreignId('artist_id')->constrained('artists')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('type_id')->constrained('types')->onDelete('cascade')->onUpdate('cascade');
+
+            // Optionnel : pour éviter les doublons
+            $table->unique(['artist_id', 'type_id']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('artist_type');

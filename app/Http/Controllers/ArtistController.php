@@ -13,12 +13,12 @@ class ArtistController extends Controller
     public function index()
     {
         //Récupérer tous les artistes (modèle - database)
-        $artists = Artist::all();
+        $artists = Artist::with('types')->get();
 
         //dd($artists);
 
         //Envoyer les données à la vue (template)
-        return view('artist.index',[
+        return view('artist.index', [
             'artists' => $artists,
         ]);
     }

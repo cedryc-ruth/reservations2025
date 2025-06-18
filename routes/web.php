@@ -19,7 +19,6 @@ use App\Models\Representation;
 use App\Models\Location;
 use App\Http\Controllers\ReviewController;
 
-
 // Page d'accueil user/frontend
 Route::get('/', function () {
     return view('welcome');
@@ -70,19 +69,6 @@ Route::get('/shows', [ShowController::class, 'index'])->name('show.index');
 Route::get('/shows/{id}', [ShowController::class, 'show'])->name('show.show');
 
 // TODO edit/create/delete si nécessaire
-
-
-//USERS
-/**Route::get('/users', [UserController::class, 'index'])->name('user.index');
-Route::get('/users/{id}', action: [UserController::class, 'show'])->where('id', '[0-9]+')->name('user.show');
-Route::get('/users/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
-Route::put('/users/{id}', [UserController::class, 'update'])->name('user.update');
-Route::get('/users/create', [UserController::class, 'create'])->name('user.create');
-Route::post('/users', [UserController::class, 'store'])->name('user.store');
-Route::delete('/users/{id}', [UserController::class, 'destroy'])
-	->where('id', '[0-9]+')->name('user.delete');
-**/
-    // TODO edit/create/delete si nécessaire
 
 
 // LOCATIONS
@@ -148,13 +134,44 @@ Route::get('/admin/export/all', function () {
 });
 
 
-// TODO edit/store/delete si nécessaire
 
-// Authentification Laravel Breeze
+
+function registerCsvExport(string $uri, string $modelClass)
+{
+    Route::get("/admin/export/$uri", function () use ($uri, $modelClass) {
+        $collection = $modelClass::all();
+
+        return Response::stream(function () use ($collection, $uri) {
+            echo "\xEF\xBB\xBF"; // UTF-8 BOM pour Excel
+            $handle = fopen('php://output', 'w');
+
+            fputcsv($handle, ["== " . strtoupper($uri) . " =="]);
+            if ($collection->isEmpty()) {
+                fputcsv($handle, ['(aucune donnée)']);
+            } else {
+                fputcsv($handle, array_keys($collection->first()->getAttributes()), ';');
+                foreach ($collection as $item) {
+                    fputcsv($handle, $item->toArray(), ';');
+                }
+            }
+
+            fclose($handle);
+        }, 200, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"export_{$uri}.csv\"",
+        ]);
+    })->name("export.$uri");
+}
+
+// Appels simples
+registerCsvExport('users', \App\Models\User::class);
+registerCsvExport('shows', \App\Models\Show::class);
+registerCsvExport('reviews', \App\Models\Review::class);
+registerCsvExport('reservations', \App\Models\Reservation::class);
+registerCsvExport('representations', \App\Models\Representation::class);
+registerCsvExport('artists', \App\Models\Artist::class);
+registerCsvExport('locations', \App\Models\Location::class);
+registerCsvExport('types', \App\Models\Type::class);
+
 require __DIR__.'/auth.php';
-
-    // TODO edit/store/delete si nécessaire
-
-
-
 

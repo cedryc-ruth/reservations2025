@@ -18,7 +18,7 @@ class ReservationResource extends Resource
 {
     protected static ?string $model = Reservation::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-ticket';
     protected static ?string $navigationGroup = 'Réservations';
     protected static ?string $navigationLabel = 'Réservations';
     protected static ?int $navigationSort = 5;
@@ -66,6 +66,14 @@ class ReservationResource extends Resource
         ])
         ->bulkActions([
             Tables\Actions\DeleteBulkAction::make(),
+        ])
+        ->headerActions([
+            Action::make('export')
+                ->label('Exporter CSV')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('warning')
+                ->url(route('export.reservations'))
+                ->openUrlInNewTab(),
         ]);
     }
 

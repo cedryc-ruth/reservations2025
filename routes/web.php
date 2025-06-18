@@ -12,16 +12,13 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RepresentationReservationController;
-<<<<<<< feat/vues-blade
 use App\Models\User;
 use App\Models\Reservation;
 use App\Models\Show;
 use App\Models\Representation;
 use App\Models\Location;
-=======
 use App\Http\Controllers\ReviewController;
 
->>>>>>> master
 
 // Page d'accueil user/frontend
 Route::get('/', function () {
@@ -149,7 +146,7 @@ Route::get('/admin/export/all', function () {
         fclose($handle);
     }, 200, $headers);
 });
-=======
+
 
 // TODO edit/store/delete si nécessaire
 
@@ -163,4 +160,3 @@ require __DIR__.'/auth.php';
 Route::get('/shows/{show}/reviews', [ReviewController::class, 'index']);
 
 
->>>>>>> master

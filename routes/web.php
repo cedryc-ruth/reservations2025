@@ -18,6 +18,8 @@ use App\Models\Show;
 use App\Models\Representation;
 use App\Models\Location;
 use App\Http\Controllers\ReviewController;
+use Spatie\Feed\FeedItem;
+use Spatie\Feed\Feed;
 
 // Page d'accueil user/frontend
 Route::get('/', function () {
@@ -63,12 +65,9 @@ Route::get('/types/{id}', [TypeController::class, 'show'])->name('type.show');
 Route::get('/types/edit/{id}', [TypeController::class, 'edit'])->name('type.edit');
 Route::put('/types/{id}', [TypeController::class, 'update'])->name('type.update');
 
-
 // SHOWS
 Route::get('/shows', [ShowController::class, 'index'])->name('show.index');
 Route::get('/shows/{id}', [ShowController::class, 'show'])->name('show.show');
-
-
 
 
 // LOCATIONS
@@ -80,6 +79,8 @@ Route::get('/locations/{id}', [LocationController::class, 'show'])
 //REVIEW 
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
+
+
 // RESERVATIONS
 Route::get('/reservations', [ReservationController::class, 'index'])->name('reservation.index');
 Route::get('/reservations/{id}', [ReservationController::class, 'show'])
@@ -90,8 +91,6 @@ Route::get('/reservations/{id}', [ReservationController::class, 'show'])
 Route::get('/representation-reservations', [RepresentationReservationController::class, 'index'])->name('representation_reservation.index');
 Route::get('/representation-reservations/{id}', [RepresentationReservationController::class, 'show'])
     ->where('id','[0-9]+')->name('representation_reservation.show');
-
-    // TODO edit/store/delete si nécessaire
 
 // ROUTE D'EXPORT CSV - TOUT RESERVATION - BACKOFFICE
 Route::get('/admin/export/all', function () {
@@ -166,15 +165,18 @@ function registerCsvExport(string $uri, string $modelClass)
     })->name("export.$uri");
 }
 
-// Appels simples
-registerCsvExport('users', \App\Models\User::class);
-registerCsvExport('shows', \App\Models\Show::class);
-registerCsvExport('reviews', \App\Models\Review::class);
-registerCsvExport('reservations', \App\Models\Reservation::class);
-registerCsvExport('representations', \App\Models\Representation::class);
-registerCsvExport('artists', \App\Models\Artist::class);
-registerCsvExport('locations', \App\Models\Location::class);
-registerCsvExport('types', \App\Models\Type::class);
+    // Appels simples
+    registerCsvExport('users', \App\Models\User::class);
+    registerCsvExport('shows', \App\Models\Show::class);
+    registerCsvExport('reviews', \App\Models\Review::class);
+    registerCsvExport('reservations', \App\Models\Reservation::class);
+    registerCsvExport('representations', \App\Models\Representation::class);
+    registerCsvExport('artists', \App\Models\Artist::class);
+    registerCsvExport('locations', \App\Models\Location::class);
+    registerCsvExport('types', \App\Models\Type::class);
+
+// FLUX RSS
+Route::feeds();
 
 require __DIR__.'/auth.php';
 

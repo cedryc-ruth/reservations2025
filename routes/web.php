@@ -69,15 +69,23 @@ Route::put('/types/{id}', [TypeController::class, 'update'])->name('type.update'
 Route::get('/shows', [ShowController::class, 'index'])->name('show.index');
 Route::get('/shows/{id}', [ShowController::class, 'show'])->name('show.show');
 
+
 // LOCATIONS
 Route::get('/locations', [LocationController::class, 'index'])->name('location.index');
 Route::get('/locations/{id}', [LocationController::class, 'show'])
     ->where('id','[0-9]+')->name('location.show');
 
+
+//REVIEW 
+Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+
+
+
 // RESERVATIONS
 Route::get('/reservations', [ReservationController::class, 'index'])->name('reservation.index');
 Route::get('/reservations/{id}', [ReservationController::class, 'show'])
     ->where('id','[0-9]+')->name('reservation.show');
+
 
 // REPRESENTATION - RESERVATION
 Route::get('/representation-reservations', [RepresentationReservationController::class, 'index'])->name('representation_reservation.index');

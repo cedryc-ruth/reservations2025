@@ -17,7 +17,7 @@
             </div>
         </div>
     </x-filament::card>
-            <div class="h-6"></div>
+    <div class="h-6"></div>
     <x-filament::card class="mt-6">
         @php
 

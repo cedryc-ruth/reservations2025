@@ -69,13 +69,11 @@ public function index(Request $request)
      */
     public function show(string $id)
     {
-        //Récupérer les données depuis le modèle (database)
-        $show = Show::find($id);
+    $show = Show::with(['reviews.user'])->findOrFail($id);
 
-        //Envoyer les données à la vue (template)
-        return view('show.show', [
-            'show' => $show,
-        ]);
+    return view('show.show', [
+        'show' => $show,
+    ]);
     }
 
     /**

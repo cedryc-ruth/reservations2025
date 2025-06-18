@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -25,15 +26,18 @@ class UserSeeder extends Seeder
                 'langue'=>'en',
                 'login'=>'BobSull',
                 'email' => 'bob@sull.com',
-                'password' => '12345678',
+                'password' => Hash::make('12345678'),
+                'is_admin' => false,
             ],
             [
+
                 'firstname' => 'Lydia',
                 'lastname' => 'Smith',
                 'langue'=>'en',
                 'login'=>'Lydia25',
                 'email' => 'lydia@smith.com',
-                'password' => '12345678',
+                'password' => Hash::make('12345678'),
+              'is_admin' => false,
             ],
             [
                 'firstname' => 'Fred',
@@ -41,7 +45,26 @@ class UserSeeder extends Seeder
                 'langue'=>'fr',
                 'login'=>'FCury',
                 'email' => 'fred@cury.com',
-                'password' => '12345678',
+                'password' => Hash::make('12345678'),
+              'is_admin' => false,
+
+                'name' => 'Lydia',
+                'email' => 'lydia@sull.com',
+                'password' => Hash::make('12345678'),
+                'is_admin' => false,
+            ],
+            [
+                'name' => 'Fred',
+                'email' => 'fred@sull.com',
+                'password' => Hash::make('12345678'),
+                'is_admin' => false,
+            ],
+            [
+                'name' => 'Admin',
+                'email' => 'admin@example.com',
+                'password' => Hash::make('admin123'),
+                'is_admin' => true,
+
             ],
     
              [
@@ -50,7 +73,8 @@ class UserSeeder extends Seeder
                 'langue'=>'fr',
                 'login'=>'MarieDb',
                 'email' => 'marie@dubois.com',
-                'password' => '12345678',
+                'password' => Hash::make('12345678'),
+               'is_admin' => false,
             ],
              [
                 'firstname' => 'Martin',
@@ -58,7 +82,8 @@ class UserSeeder extends Seeder
                 'langue'=>'fr',
                 'login'=>'Mtho',
                 'email' => 'martin@thomas.com',
-                'password' => '12345678',
+                'password' => Hash::make('12345678'),
+                'is_admin' => false,
             ],
              [
                 'firstname' => 'Louise',
@@ -66,7 +91,8 @@ class UserSeeder extends Seeder
                 'langue'=>'nl',
                 'login'=>'Lou',
                 'email' => 'Louise@Desmet.com',
-                'password' => '12345678',
+                'password' => Hash::make('12345678'),
+                'is_admin' => false,
             ],
              [
                 'firstname' => 'Rafael',
@@ -74,7 +100,8 @@ class UserSeeder extends Seeder
                 'langue'=>'es',
                 'login'=>'rMar',
                 'email' => 'rafael@martinez.com',
-                'password' => '12345678',
+                'password' => Hash::make('12345678'),
+                'is_admin' => false,
             ],
              [
                 'firstname' => 'Thomas',
@@ -82,7 +109,8 @@ class UserSeeder extends Seeder
                 'langue'=>'fr',
                 'login'=>'thoamsp',
                 'email' => 'thhomas@petit.com',
-                'password' => '12345678',
+                'password' => Hash::make('12345678'),
+                 'is_admin' => false,
             ], 
             [
                 'firstname' => 'Nowak',
@@ -90,7 +118,8 @@ class UserSeeder extends Seeder
                 'langue'=>'pl',
                 'login'=>'Noko',
                 'email' => 'nowak@kochanowski.com',
-                'password' => '12345678',
+                'password' => Hash::make('12345678'),
+                'is_admin' => false,
             ],
             [
                 'firstname' => 'Hamza',
@@ -98,7 +127,8 @@ class UserSeeder extends Seeder
                 'langue'=>'ar',
                 'login'=>'Hamza1003',
                 'email' => 'hamza@naim.com',
-                'password' => '12345678',
+                'password' => Hash::make('12345678'),
+                'is_admin' => false,
             ],
             [
                 'firstname' => 'Hanane',
@@ -106,7 +136,8 @@ class UserSeeder extends Seeder
                 'langue'=>'ar',
                 'login'=>'hanamar',
                 'email' => 'hanane@amar.com',
-                'password' => '12345678',
+                'password' => Hash::make('12345678'),
+                'is_admin' => false,
             ],
             [
                 'firstname' => 'Maeve',
@@ -114,7 +145,8 @@ class UserSeeder extends Seeder
                 'langue'=>'ir',
                 'login'=>'justKelly',
                 'email' => 'maeve@kelly.com',
-                'password' => '12345678',
+                'password' => Hash::make('12345678'),
+                'is_admin' => false,
             ],
             [
                 'firstname' => 'Niall',
@@ -122,7 +154,8 @@ class UserSeeder extends Seeder
                 'langue'=>'ir',
                 'login'=>'Ryan2025',
                 'email' => 'niall@ryan.com',
-                'password' => '12345678',
+                'password' => Hash::make('12345678'),
+                'is_admin' => false,
             ],
             
 

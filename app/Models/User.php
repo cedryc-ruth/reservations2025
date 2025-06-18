@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -68,11 +70,27 @@ class User extends Authenticatable
     {
         return $this->hasMany(Reservation::class);
     }
+
      /**
      * Get the roles of the user.
      * 
      * @return The roles  of the user.
      */
+
+
+    public function canAccessPanel(\Filament\Panel $panel): bool
+    {
+        // Logique pour autoriser l'accès à l'admin
+        return true; // ou $this->is_admin
+    }
+  
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+
+    }
+
+
     public function roles()
     {
         return $this->belongsToMany(Role::class);

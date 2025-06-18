@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
@@ -21,9 +22,12 @@ class User extends Authenticatable implements FilamentUser
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'firstname',
+        'lastname',
         'email',
+        'langue',
         'password',
+        'is_admin'
     ];
 
     /**
@@ -48,6 +52,14 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
         ];
     }
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'users';
+    public $timestamps = false;
+
 
     /**
      * Get the reservations of the user.
@@ -59,6 +71,13 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Reservation::class);
     }
 
+     /**
+     * Get the roles of the user.
+     * 
+     * @return The roles  of the user.
+     */
+
+
     public function canAccessPanel(\Filament\Panel $panel): bool
     {
         // Logique pour autoriser l'accès à l'admin
@@ -69,5 +88,16 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(Review::class);
 
+    }
+
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function hasRole($role)
+    {
+        return $this->roles()->where('role', $role)->exists();
     }
 }

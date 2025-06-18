@@ -21,9 +21,9 @@ class Location extends Model
     
     public $timestamps = false;
 
-    public function locality() :BelongsToMany
+    public function locality() :BelongsTo
     {
-        return $this->belongsToMany(Locality::class);
+        return $this->belongsTo(Locality::class);
     }
 
     /**

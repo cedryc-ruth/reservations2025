@@ -73,7 +73,7 @@ Route::get('/shows/{id}', [ShowController::class, 'show'])->name('show.show');
 
 
 //USERS
-Route::get('/users', [UserController::class, 'index'])->name('user.index');
+/**Route::get('/users', [UserController::class, 'index'])->name('user.index');
 Route::get('/users/{id}', action: [UserController::class, 'show'])->where('id', '[0-9]+')->name('user.show');
 Route::get('/users/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('user.update');
@@ -81,7 +81,7 @@ Route::get('/users/create', [UserController::class, 'create'])->name('user.creat
 Route::post('/users', [UserController::class, 'store'])->name('user.store');
 Route::delete('/users/{id}', [UserController::class, 'destroy'])
 	->where('id', '[0-9]+')->name('user.delete');
-
+**/
     // TODO edit/create/delete si nécessaire
 
 

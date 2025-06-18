@@ -9,8 +9,6 @@ use App\Http\Controllers\TypeController;
 use App\Http\Controllers\ShowController;
 use App\Http\Controllers\UserController;
 
-use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RepresentationReservationController;

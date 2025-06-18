@@ -156,7 +156,5 @@ require __DIR__.'/auth.php';
     // TODO edit/store/delete si nécessaire
 
 
-// REVIEW 
-Route::get('/shows/{show}/reviews', [ReviewController::class, 'index']);
 
 

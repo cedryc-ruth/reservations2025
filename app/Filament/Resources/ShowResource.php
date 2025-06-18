@@ -9,6 +9,10 @@ use Filament\Forms\Form;
 use Filament\Tables;
 use Filament\Resources\Resource;
 use App\Filament\Resources\ShowResource\Pages;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 
 class ShowResource extends Resource
 {
@@ -18,46 +22,54 @@ class ShowResource extends Resource
     protected static ?string $navigationLabel = 'Spectacles';
     protected static ?int $navigationSort = 3;
 
-    public static function form(Forms\Form $form): Forms\Form
-    {
-        return $form->schema([
-            Forms\Components\TextInput::make('slug')
-                ->required()
-                ->unique(ignoreRecord: true)
-                ->maxLength(60),
+    public static function form(Form $form): Form
+{
+    return $form->schema([
+        TextInput::make('title')
+            ->label('Titre')
+            ->required(),
 
-            Forms\Components\TextInput::make('title')
-                ->required()
-                ->maxLength(255),
+        TextInput::make('slug')
+            ->label('Slug')
+            ->required(),
 
-            Forms\Components\Textarea::make('description')
-                ->required()
-                ->columnSpanFull(),
+        Textarea::make('description')
+            ->label('Description')
+            ->required(),
 
-            Forms\Components\TextInput::make('poster_url')
-                ->label('Affiche (URL)')
-                ->url()
-                ->nullable(),
+        FileUpload::make('poster_url')
+            ->label('Affiche')
+            ->directory('images') // va enregistrer dans public/images/
+            ->disk('public_root') // cf. config/filesystems.php ci-dessous
+            ->visibility('public')
+            ->required(),
 
-            Forms\Components\TextInput::make('duration')
-                ->label('Durée (min)')
-                ->numeric()
-                ->required(),
+        TextInput::make('duration')
+            ->label('Durée (minutes)')
+            ->numeric()
+            ->required(),
 
-            Forms\Components\DatePicker::make('created_in')
-                ->label('Année de création')
-                ->required(),
+        TextInput::make('created_in')
+            ->label('Année de création')
+            ->numeric()
+            ->minValue(1900)
+            ->maxValue(date('Y'))
+            ->required(),
 
-            Forms\Components\Select::make('location_id')
-                ->relationship('location', 'designation')
-                ->label('Lieu')
-                ->required(),
+        Select::make('location_id')
+            ->label('Lieu')
+            ->relationship('location', 'designation')
+            ->required(),
 
-            Forms\Components\Toggle::make('bookable')
-                ->label('Réservable')
-                ->default(true),
-        ]);
-    }
+        Select::make('bookable')
+            ->label('Réservable ?')
+            ->options([
+                0 => 'Non',
+                1 => 'Oui',
+            ])
+            ->required(),
+    ]);
+}
 
     public static function table(Tables\Table $table): Tables\Table
     {

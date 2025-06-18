@@ -71,19 +71,6 @@ Route::get('/shows/{id}', [ShowController::class, 'show'])->name('show.show');
 // TODO edit/create/delete si nécessaire
 
 
-//USERS
-Route::get('/users', [UserController::class, 'index'])->name('user.index');
-Route::get('/users/{id}', action: [UserController::class, 'show'])->where('id', '[0-9]+')->name('user.show');
-Route::get('/users/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
-Route::put('/users/{id}', [UserController::class, 'update'])->name('user.update');
-Route::get('/users/create', [UserController::class, 'create'])->name('user.create');
-Route::post('/users', [UserController::class, 'store'])->name('user.store');
-Route::delete('/users/{id}', [UserController::class, 'destroy'])
-	->where('id', '[0-9]+')->name('user.delete');
-
-    // TODO edit/create/delete si nécessaire
-
-
 // LOCATIONS
 Route::get('/locations', [LocationController::class, 'index'])->name('location.index');
 Route::get('/locations/{id}', [LocationController::class, 'show'])
@@ -146,6 +133,9 @@ Route::get('/admin/export/all', function () {
     }, 200, $headers);
 });
 
+
+
+
 function registerCsvExport(string $uri, string $modelClass)
 {
     Route::get("/admin/export/$uri", function () use ($uri, $modelClass) {
@@ -182,4 +172,6 @@ registerCsvExport('representations', \App\Models\Representation::class);
 registerCsvExport('artists', \App\Models\Artist::class);
 registerCsvExport('locations', \App\Models\Location::class);
 registerCsvExport('types', \App\Models\Type::class);
+
+require __DIR__.'/auth.php';
 

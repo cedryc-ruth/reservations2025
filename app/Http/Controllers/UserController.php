@@ -25,6 +25,7 @@ class UserController extends Controller
     public function create()
     {
         return view('user.create');
+
     }
 
     /**
@@ -35,6 +36,9 @@ class UserController extends Controller
         $validated = $request->validate([
             'firstname' => 'required|max:60',
             'lastname' => 'required|max:60',
+            'email' => 'required|max:60',
+            'password'=>'required|max:60',
+            'langue' => 'max:60',
         ]);
         //Le formulaire a été validé, nous créons un nouvel utilisateur  à insérer
         $user = new User();
@@ -42,7 +46,9 @@ class UserController extends Controller
         //Assignation des données et sauvegarde dans la base de données
         $user->firstname = $validated['firstname'];
         $user->lastname = $validated['lastname'];
-
+        $user->password = $validated['password'];
+        $user->email = $validated['email'];
+        $user->langue = $validated['langue'];
         $user->save();
 
         return redirect()->route('user.index');

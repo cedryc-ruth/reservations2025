@@ -8,7 +8,6 @@ use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\ShowController;
 use App\Http\Controllers\UserController;
-
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RepresentationReservationController;

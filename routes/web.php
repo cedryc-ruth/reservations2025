@@ -101,7 +101,7 @@ Route::get('/reservations/{id}', [ReservationController::class, 'show'])
 Route::get('/representation-reservations', [RepresentationReservationController::class, 'index'])->name('representation_reservation.index');
 Route::get('/representation-reservations/{id}', [RepresentationReservationController::class, 'show'])
     ->where('id','[0-9]+')->name('representation_reservation.show');
-<<<<<<< feat/vues-blade
+
     // TODO edit/store/delete si nécessaire
 
 // ROUTE D'EXPORT CSV - TOUT RESERVATION - BACKOFFICE

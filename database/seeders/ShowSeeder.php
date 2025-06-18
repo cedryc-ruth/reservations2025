@@ -45,6 +45,6 @@ class ShowSeeder extends Seeder
             'location_id' => 3,
             'bookable' => false,
         ]);
-    }
+        }
     }
 }

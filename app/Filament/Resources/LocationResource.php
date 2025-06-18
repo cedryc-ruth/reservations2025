@@ -10,13 +10,14 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class LocationResource extends Resource
 {
     protected static ?string $model = Location::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-building-library';
     protected static ?string $navigationGroup = 'Gestion du contenu';
     protected static ?string $navigationLabel = 'Lieux';
     protected static ?int $navigationSort = 2;
@@ -71,6 +72,14 @@ class LocationResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+            ])
+            ->headerActions([
+            Action::make('export')
+                ->label('Exporter CSV')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('warning')
+                ->url(route('export.locations'))
+                ->openUrlInNewTab(),
             ]);
     }
 

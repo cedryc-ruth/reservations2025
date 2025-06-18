@@ -12,16 +12,12 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RepresentationReservationController;
-<<<<<<< feat/vues-blade
 use App\Models\User;
 use App\Models\Reservation;
 use App\Models\Show;
 use App\Models\Representation;
 use App\Models\Location;
-=======
 use App\Http\Controllers\ReviewController;
-
->>>>>>> master
 
 // Page d'accueil user/frontend
 Route::get('/', function () {
@@ -104,7 +100,7 @@ Route::get('/reservations/{id}', [ReservationController::class, 'show'])
 Route::get('/representation-reservations', [RepresentationReservationController::class, 'index'])->name('representation_reservation.index');
 Route::get('/representation-reservations/{id}', [RepresentationReservationController::class, 'show'])
     ->where('id','[0-9]+')->name('representation_reservation.show');
-<<<<<<< feat/vues-blade
+
     // TODO edit/store/delete si nécessaire
 
 // ROUTE D'EXPORT CSV - TOUT RESERVATION - BACKOFFICE
@@ -149,18 +145,41 @@ Route::get('/admin/export/all', function () {
         fclose($handle);
     }, 200, $headers);
 });
-=======
 
-// TODO edit/store/delete si nécessaire
+function registerCsvExport(string $uri, string $modelClass)
+{
+    Route::get("/admin/export/$uri", function () use ($uri, $modelClass) {
+        $collection = $modelClass::all();
 
-// Authentification Laravel Breeze
-require __DIR__.'/auth.php';
+        return Response::stream(function () use ($collection, $uri) {
+            echo "\xEF\xBB\xBF"; // UTF-8 BOM pour Excel
+            $handle = fopen('php://output', 'w');
 
-    // TODO edit/store/delete si nécessaire
+            fputcsv($handle, ["== " . strtoupper($uri) . " =="]);
+            if ($collection->isEmpty()) {
+                fputcsv($handle, ['(aucune donnée)']);
+            } else {
+                fputcsv($handle, array_keys($collection->first()->getAttributes()), ';');
+                foreach ($collection as $item) {
+                    fputcsv($handle, $item->toArray(), ';');
+                }
+            }
 
+            fclose($handle);
+        }, 200, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"export_{$uri}.csv\"",
+        ]);
+    })->name("export.$uri");
+}
 
-// REVIEW 
-Route::get('/shows/{show}/reviews', [ReviewController::class, 'index']);
+// Appels simples
+registerCsvExport('users', \App\Models\User::class);
+registerCsvExport('shows', \App\Models\Show::class);
+registerCsvExport('reviews', \App\Models\Review::class);
+registerCsvExport('reservations', \App\Models\Reservation::class);
+registerCsvExport('representations', \App\Models\Representation::class);
+registerCsvExport('artists', \App\Models\Artist::class);
+registerCsvExport('locations', \App\Models\Location::class);
+registerCsvExport('types', \App\Models\Type::class);
 
-
->>>>>>> master

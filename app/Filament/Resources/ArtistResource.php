@@ -10,9 +10,9 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
 class ArtistResource extends Resource
 {
     protected static ?string $model = Artist::class;
@@ -71,6 +71,14 @@ class ArtistResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+            ])
+            ->headerActions([
+            Action::make('export')
+                ->label('Exporter CSV')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('warning')
+                ->url(route('export.artists'))
+                ->openUrlInNewTab(),
             ]);
     }
 

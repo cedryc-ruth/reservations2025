@@ -7,6 +7,7 @@ use App\Models\Location;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Resources\Resource;
 use App\Filament\Resources\ShowResource\Pages;
 use Filament\Forms\Components\TextInput;
@@ -23,53 +24,53 @@ class ShowResource extends Resource
     protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
-{
-    return $form->schema([
-        TextInput::make('title')
-            ->label('Titre')
-            ->required(),
+    {
+        return $form->schema([
+            Forms\Components\TextInput::make('title')
+                ->label('Titre')
+                ->required(),
 
-        TextInput::make('slug')
-            ->label('Slug')
-            ->required(),
+            Forms\Components\TextInput::make('slug')
+                ->label('Slug')
+                ->required(),
 
-        Textarea::make('description')
-            ->label('Description')
-            ->required(),
+            Forms\Components\Textarea::make('description')
+                ->label('Description')
+                ->required(),
 
-        FileUpload::make('poster_url')
-            ->label('Affiche')
-            ->directory('images') // va enregistrer dans public/images/
-            ->disk('public_root') // cf. config/filesystems.php ci-dessous
-            ->visibility('public')
-            ->required(),
+            Forms\Components\FileUpload::make('poster_url')
+                ->label('Affiche')
+                ->directory('images') // va enregistrer dans public/images/
+                ->disk('public_root') // cf. config/filesystems.php ci-dessous
+                ->visibility('public')
+                ->required(),
 
-        TextInput::make('duration')
-            ->label('Durée (minutes)')
-            ->numeric()
-            ->required(),
+            Forms\Components\TextInput::make('duration')
+                ->label('Durée (minutes)')
+                ->numeric()
+                ->required(),
 
-        TextInput::make('created_in')
-            ->label('Année de création')
-            ->numeric()
-            ->minValue(1900)
-            ->maxValue(date('Y'))
-            ->required(),
+            Forms\Components\TextInput::make('created_in')
+                ->label('Année de création')
+                ->numeric()
+                ->minValue(1900)
+                ->maxValue(date('Y'))
+                ->required(),
 
-        Select::make('location_id')
-            ->label('Lieu')
-            ->relationship('location', 'designation')
-            ->required(),
+            Forms\Components\Select::make('location_id')
+                ->label('Lieu')
+                ->relationship('location', 'designation')
+                ->required(),
 
-        Select::make('bookable')
-            ->label('Réservable ?')
-            ->options([
-                0 => 'Non',
-                1 => 'Oui',
-            ])
-            ->required(),
-    ]);
-}
+            Forms\Components\Select::make('bookable')
+                ->label('Réservable ?')
+                ->options([
+                    0 => 'Non',
+                    1 => 'Oui',
+                ])
+                ->required(),
+        ]);
+    }
 
     public static function table(Tables\Table $table): Tables\Table
     {
@@ -85,7 +86,15 @@ class ShowResource extends Resource
         ])
         ->bulkActions([
             Tables\Actions\DeleteBulkAction::make(),
-        ]);
+        ])
+        ->headerActions([
+            Action::make('export')
+                ->label('Exporter CSV')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('warning')
+                ->url(route('export.shows'))
+                ->openUrlInNewTab(),
+            ]);
     }
 
     public static function getPages(): array

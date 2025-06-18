@@ -10,13 +10,14 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class RepresentationResource extends Resource
 {
     protected static ?string $model = Representation::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar-date-range';
     protected static ?string $navigationGroup = 'Gestion du contenu';
     protected static ?string $navigationLabel = 'Représentations';
     protected static ?int $navigationSort = 4;
@@ -50,7 +51,15 @@ class RepresentationResource extends Resource
         ])
         ->bulkActions([
             Tables\Actions\DeleteBulkAction::make(),
-        ]);
+        ])
+        ->headerActions([
+            Action::make('export')
+                ->label('Exporter CSV')
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('warning')
+                ->url(route('export.representations'))
+                ->openUrlInNewTab(),
+            ]);
     }
 
     public static function getRelations(): array

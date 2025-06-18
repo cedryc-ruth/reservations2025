@@ -7,9 +7,15 @@ use Filament\Facades\Filament;
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\ShowController;
+use App\Http\Controllers\UserController;
+
+use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RepresentationReservationController;
+use App\Http\Controllers\ReviewController;
+
 
 // Page d'accueil user/frontend
 Route::get('/', function () {
@@ -59,7 +65,22 @@ Route::put('/types/{id}', [TypeController::class, 'update'])->name('type.update'
 // SHOWS
 Route::get('/shows', [ShowController::class, 'index'])->name('show.index');
 Route::get('/shows/{id}', [ShowController::class, 'show'])->name('show.show');
+
 // TODO edit/create/delete si nécessaire
+
+
+//USERS
+Route::get('/users', [UserController::class, 'index'])->name('user.index');
+Route::get('/users/{id}', action: [UserController::class, 'show'])->where('id', '[0-9]+')->name('user.show');
+Route::get('/users/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+Route::put('/users/{id}', [UserController::class, 'update'])->name('user.update');
+Route::get('/users/create', [UserController::class, 'create'])->name('user.create');
+Route::post('/users', [UserController::class, 'store'])->name('user.store');
+Route::delete('/users/{id}', [UserController::class, 'destroy'])
+	->where('id', '[0-9]+')->name('user.delete');
+
+    // TODO edit/create/delete si nécessaire
+
 
 // LOCATIONS
 Route::get('/locations', [LocationController::class, 'index'])->name('location.index');
@@ -77,7 +98,16 @@ Route::get('/reservations/{id}', [ReservationController::class, 'show'])
 Route::get('/representation-reservations', [RepresentationReservationController::class, 'index'])->name('representation_reservation.index');
 Route::get('/representation-reservations/{id}', [RepresentationReservationController::class, 'show'])
     ->where('id','[0-9]+')->name('representation_reservation.show');
+
 // TODO edit/store/delete si nécessaire
 
 // Authentification Laravel Breeze
 require __DIR__.'/auth.php';
+
+    // TODO edit/store/delete si nécessaire
+
+
+// REVIEW 
+Route::get('/shows/{show}/reviews', [ReviewController::class, 'index']);
+
+

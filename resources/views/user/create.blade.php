@@ -29,6 +29,43 @@
         <div>{{ $message }}</div>
     @enderror
     </div>
+
+    <div>
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" required maxlength="60"
+    @if(old('email'))
+        value="{{ old('email') }}"
+    @endif >
+    @error('email')
+        <div>{{ $message }}</div>
+    @enderror
+    </div>
+
+
+    <div>
+        <label for="password">Mot de passe</label>
+        <input type="text" name="password" id="password" required maxlength="60"
+    @if(old('password'))
+        value="{{ old('password') }}"
+    @endif >
+    @error('password')
+        <div>{{ $message }}</div>
+    @enderror
+    </div>
+
+
+       <div>
+        <label for="langue">Langue</label>
+        <input type="text" name="langue" id="langue" 
+    @if(old('langue'))
+        value="{{ old('langue') }}"
+    @endif >
+    @error('langue')
+        <div>{{ $message }}</div>
+    @enderror
+    </div>
+
+
     <button>Ajouter</button>
     <p><a href="{{ route('user.index') }}">Annuler</a></p>
 

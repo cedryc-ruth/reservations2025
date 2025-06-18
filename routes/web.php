@@ -62,26 +62,29 @@ Route::get('/types', [TypeController::class, 'index'])->name('type.index');
 Route::get('/types/{id}', [TypeController::class, 'show'])->name('type.show');
 Route::get('/types/edit/{id}', [TypeController::class, 'edit'])->name('type.edit');
 Route::put('/types/{id}', [TypeController::class, 'update'])->name('type.update');
-// TODO store/create/delete
+
 
 // SHOWS
 Route::get('/shows', [ShowController::class, 'index'])->name('show.index');
 Route::get('/shows/{id}', [ShowController::class, 'show'])->name('show.show');
 
-// TODO edit/create/delete si nécessaire
+
 
 
 // LOCATIONS
 Route::get('/locations', [LocationController::class, 'index'])->name('location.index');
 Route::get('/locations/{id}', [LocationController::class, 'show'])
     ->where('id','[0-9]+')->name('location.show');
-// TODO create/edit/delete/update si nécessaire
+
+
+//REVIEW 
+Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
 // RESERVATIONS
 Route::get('/reservations', [ReservationController::class, 'index'])->name('reservation.index');
 Route::get('/reservations/{id}', [ReservationController::class, 'show'])
     ->where('id','[0-9]+')->name('reservation.show');
-// TODO create/store/delete si nécessaire
+
 
 // REPRESENTATION - RESERVATION
 Route::get('/representation-reservations', [RepresentationReservationController::class, 'index'])->name('representation_reservation.index');

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Show;
 use App\Models\Location;
+use App\Models\Reservation;
+use Illuminate\Support\Facades\Auth;
 
 class ShowController extends Controller
 {
@@ -67,14 +69,31 @@ public function index(Request $request)
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-    $show = Show::with(['reviews.user'])->findOrFail($id);
+public function show(string $id)
+{
+    // On récupère le spectacle avec ses reviews et les utilisateurs associés
+    $show = Show::with('reviews.user')->findOrFail($id);
 
-    return view('show.show', [
-        'show' => $show,
-    ]);
+    $canReview = false;
+
+    // Je verif si l'utilisateur est connecté
+    if (Auth::check()) {
+        $user = Auth::user();
+
+    // Je verif s'il a une réservation avec une date passée et liée à une représentation de ce spectacle
+        $hasAttended = $user->reservations()
+            ->where('booking_date', '<', now())
+            ->whereHas('representations', function ($query) use ($show) {
+                $query->where('show_id', $show->id);
+            })
+            ->exists();
+
+        $canReview = $hasAttended;
     }
+
+    // Je retourne la vue avec les données
+    return view('show.show', compact('show', 'canReview'));
+}
 
     /**
      * Show the form for editing the specified resource.

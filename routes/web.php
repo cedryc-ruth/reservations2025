@@ -23,7 +23,7 @@ use Spatie\Feed\Feed;
 
 // Page d'accueil user/frontend
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/shows');
 });
 
 // Redirection login Laravel vers admin login Filament (si utilisé)

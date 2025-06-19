@@ -14,6 +14,23 @@
         outline: none;
         box-shadow: none;
     }
+     .logout {
+        margin-top: 10px;
+        background-color: rgb(181, 208, 238);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        outline: none;
+        box-shadow: none;
+    }
+
+       .logout:hover {
+        background-color: rgb(28, 79, 136);
+        color: white !important;
+        outline: none;
+        box-shadow: none;
+    }
 
     .search-button:hover {
         background-color: rgb(28, 79, 136);

@@ -7,7 +7,7 @@
             <form method="POST" action="{{route('logout')}}">
             @csrf
             <button type="submit" class="logout">se déconnecter</button>
-            <h1>Bonjour, {{ auth()->user()->firstname }} ! Tu es connecté.</h1>
+            <h1 class="welcome">Bonjour, {{ auth()->user()->firstname }} ! Tu es connecté.</h1>
             </form>
         </li>
         @else

@@ -38,6 +38,14 @@
         outline: none;
         box-shadow: none;
     }
+
+      .welcome {
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    color: white;
+    padding: 15px 25px;
+  }
+
 </style>
 
 

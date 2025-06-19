@@ -3,24 +3,41 @@
 @section('title', 'Nos artistes')
 
 @section('content')
-
-@if(count($artists)>0)
     <h1>Liste des artistes</h1>
-    <ul>
-    @foreach($artists as $artist)
-        <li>
-            <a href="{{ route('artist.show',[$artist->id]) }}">{{ $artist->firstname }} {{ $artist->lastname }}</a>
-        </li>
-    @endforeach
-    </ul>
-@else
-    <p>Aucun artiste.</p>
-@endif
-<p><a href="{{ route('show.index') }}">← Retour au catalogue</a></p>
+
+    @if($artists->count())
+        <table border="1" cellpadding="10">
+            <thead>
+                <tr>
+                    <th>Prénom</th>
+                    <th>Nom</th>
+                    <th>Types</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($artists as $artist)
+                    <tr>
+                        <td>{{ $artist->firstname }}</td>
+                        <td>{{ $artist->lastname }}</td>
+                        <td>
+                            @if($artist->types && $artist->types->count())
+                                {{ $artist->types->pluck('type')->implode(', ') }}
+                            @else
+                                <em>Aucun type</em>
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @else
+        <p>Aucun artiste.</p>
+    @endif
+
+    <p><a href="{{ route('show.index') }}">← Retour au catalogue</a></p>
 @endsection
 
 @section('sidebar')
     @parent
-
     SIDEBAR FILLE
 @endsection

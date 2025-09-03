@@ -105,6 +105,10 @@ Route::post('/tickets/purchase', [TicketController::class, 'purchase'])->name('t
 Route::get('/tickets/{id}/payment', [TicketController::class, 'showPayment'])->name('tickets.payment');
 Route::post('/tickets/{id}/payment', [TicketController::class, 'processPayment'])->name('tickets.payment.process');
 
+// Routes Stripe
+Route::get('/tickets/{id}/success', [TicketController::class, 'success'])->name('tickets.success');
+Route::get('/tickets/{id}/stripe-cancel', [TicketController::class, 'stripeCancel'])->name('tickets.stripe.cancel');
+
 // ROUTE D'EXPORT CSV - TOUT RESERVATION - BACKOFFICE
 Route::get('/admin/export/all', function () {
     $resources = [

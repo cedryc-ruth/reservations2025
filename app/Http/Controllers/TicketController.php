@@ -9,6 +9,8 @@ use App\Models\Representation;
 use App\Models\Price;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Stripe\Stripe;
+use Stripe\Checkout\Session;
 
 class TicketController extends Controller
 {
@@ -67,13 +69,53 @@ class TicketController extends Controller
 
             DB::commit();
 
-            // Rediriger vers la page de paiement
-            return redirect()->route('tickets.payment', $ticket->id)
-                ->with('success', 'Tickets ajoutés au panier. Veuillez procéder au paiement.');
+            // Créer une session Stripe Checkout
+            return $this->createStripeCheckoutSession($ticket);
 
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Une erreur est survenue lors de l\'achat des tickets.');
+        }
+    }
+
+    /**
+     * Crée une session Stripe Checkout
+     */
+    private function createStripeCheckoutSession(Ticket $ticket)
+    {
+        // Configuration Stripe
+        Stripe::setApiKey(config('stripe.secret_key'));
+
+        try {
+            $session = Session::create([
+                'payment_method_types' => config('stripe.payment_method_types', ['card']),
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => config('stripe.currency', 'eur'),
+                        'product_data' => [
+                            'name' => config('stripe.product_name_prefix', 'Ticket - ') . $ticket->representation->show->title,
+                            'description' => 'Ticket pour ' . $ticket->representation->show->title . 
+                                           ' - ' . \Carbon\Carbon::parse($ticket->representation->schedule)->format('d/m/Y à H:i') .
+                                           config('stripe.product_description_suffix', ' - Spectacle'),
+                        ],
+                    ],
+                    'unit_amount' => (int)($ticket->total_price * 100), // Stripe utilise les centimes
+                    'quantity' => 1,
+                ]],
+                'mode' => 'payment',
+                'success_url' => route('tickets.success', $ticket->id) . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('tickets.stripe.cancel', $ticket->id),
+                'locale' => config('stripe.locale', 'fr'),
+                'metadata' => [
+                    'ticket_id' => $ticket->id,
+                    'user_id' => $ticket->user_id,
+                ],
+            ]);
+
+            return redirect($session->url);
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erreur lors de la création de la session de paiement: ' . $e->getMessage());
         }
     }
 
@@ -151,6 +193,62 @@ class TicketController extends Controller
             ->paginate(10);
 
         return view('tickets.index', compact('tickets'));
+    }
+
+    /**
+     * Gère le succès du paiement Stripe
+     */
+    public function success(Request $request, string $ticketId)
+    {
+        $ticket = Ticket::where('user_id', Auth::id())
+            ->findOrFail($ticketId);
+
+        $sessionId = $request->get('session_id');
+
+        if ($sessionId) {
+            try {
+                // Configuration Stripe
+                Stripe::setApiKey(config('stripe.secret_key'));
+
+                // Récupérer la session Stripe
+                $session = Session::retrieve($sessionId);
+
+                if ($session->payment_status === 'paid') {
+                    // Mettre à jour le ticket
+                    $ticket->update([
+                        'status' => 'paid',
+                        'payment_method' => 'stripe',
+                        'payment_reference' => $session->payment_intent,
+                    ]);
+
+                    return view('tickets.success', compact('ticket', 'session'));
+                }
+            } catch (\Exception $e) {
+                // En cas d'erreur, on continue quand même
+            }
+        }
+
+        // Si pas de session Stripe ou erreur, on affiche quand même la page de succès
+        return view('tickets.success', compact('ticket'));
+    }
+
+    /**
+     * Gère l'annulation du paiement Stripe
+     */
+    public function stripeCancel(string $ticketId)
+    {
+        $ticket = Ticket::where('user_id', Auth::id())
+            ->findOrFail($ticketId);
+
+        // Si le ticket est encore en attente, on peut le supprimer
+        if ($ticket->status === 'pending') {
+            $ticket->delete();
+            return redirect()->route('show.show', $ticket->representation->show->id)
+                ->with('error', 'Paiement annulé. Votre commande a été supprimée.');
+        }
+
+        return redirect()->route('tickets.show', $ticket->id)
+            ->with('error', 'Paiement annulé.');
     }
 
     /**

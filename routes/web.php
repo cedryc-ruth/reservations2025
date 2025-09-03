@@ -18,6 +18,7 @@ use App\Models\Show;
 use App\Models\Representation;
 use App\Models\Location;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\TicketController;
 use Spatie\Feed\FeedItem;
 use Spatie\Feed\Feed;
 
@@ -91,6 +92,18 @@ Route::get('/reservations/{id}', [ReservationController::class, 'show'])
 Route::get('/representation-reservations', [RepresentationReservationController::class, 'index'])->name('representation_reservation.index');
 Route::get('/representation-reservations/{id}', [RepresentationReservationController::class, 'show'])
     ->where('id','[0-9]+')->name('representation_reservation.show');
+
+// TICKETS - ACHAT ET GESTION
+Route::middleware('auth')->group(function () {
+    Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
+    Route::get('/tickets/{id}', [TicketController::class, 'show'])->name('tickets.show');
+    Route::post('/tickets/{id}/cancel', [TicketController::class, 'cancel'])->name('tickets.cancel');
+});
+
+Route::get('/shows/{id}/buy-tickets', [TicketController::class, 'showPurchaseForm'])->name('tickets.purchase.form');
+Route::post('/tickets/purchase', [TicketController::class, 'purchase'])->name('tickets.purchase');
+Route::get('/tickets/{id}/payment', [TicketController::class, 'showPayment'])->name('tickets.payment');
+Route::post('/tickets/{id}/payment', [TicketController::class, 'processPayment'])->name('tickets.payment.process');
 
 // ROUTE D'EXPORT CSV - TOUT RESERVATION - BACKOFFICE
 Route::get('/admin/export/all', function () {

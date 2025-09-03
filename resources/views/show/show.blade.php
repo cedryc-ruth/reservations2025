@@ -15,6 +15,16 @@
 
     <p>{{ $show->description }}</p>
 
+    <!-- Bouton d'achat de tickets -->
+    <div class="ticket-purchase-section" style="margin: 20px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+        <h3 style="margin-bottom: 15px; color: #333;">Réserver ce spectacle</h3>
+        <p style="margin-bottom: 15px; color: #666;">Choisissez votre date et vos places pour assister à ce spectacle.</p>
+        <a href="{{ route('tickets.purchase.form', $show->id) }}" 
+           style="display: inline-block; background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">
+            Acheter des tickets
+        </a>
+    </div>
+
     @if($show->reviews->count() > 0)
         <h3>Commentaires des spectateurs</h3>
         <ul>

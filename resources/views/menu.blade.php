@@ -9,6 +9,7 @@
             <button type="submit" class="logout">se déconnecter</button>
             <h1 class="welcome">Bonjour, {{ auth()->user()->firstname }} ! Tu es connecté.</h1>
             </form>
+            <li><a href="{{ route('tickets.index') }}">Mes tickets</a></li>
         </li>
         @else
         <li><a href="/register">s'inscrire</a></li>

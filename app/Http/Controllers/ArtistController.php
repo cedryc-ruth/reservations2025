@@ -62,9 +62,13 @@ class ArtistController extends Controller
         //Récupérer les données depuis le modèle (database)
         $artist = Artist::find($id);
 
+        // Charger les spectacles de l'artiste
+        $shows = $artist->shows;
+
         //Envoyer les données à la vue (template)
         return view('artist.show', [
             'artist' => $artist,
+            'shows' => $shows,
         ]);
     }
 

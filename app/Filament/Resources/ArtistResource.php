@@ -39,6 +39,12 @@ class ArtistResource extends Resource
                 ->label('Biographie')
                 ->rows(4)
                 ->maxLength(1000),
+
+            Forms\Components\Select::make('types')
+                ->relationship('types', 'type')
+                ->multiple()
+                ->label('Types d\'artiste')
+                ->preload(),
         ]);
     }
 
@@ -55,6 +61,11 @@ class ArtistResource extends Resource
                     ->label('Nom')
                     ->searchable()
                     ->sortable(),
+
+                Tables\Columns\TextColumn::make('types.type')
+                    ->label('Types')
+                    ->badge()
+                    ->separator(', '),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Ajouté le')

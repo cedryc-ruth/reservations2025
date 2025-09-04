@@ -71,8 +71,8 @@ public function index(Request $request)
      */
 public function show(string $id)
 {
-    // On récupère le spectacle avec ses reviews et les utilisateurs associés
-    $show = Show::with('reviews.user')->findOrFail($id);
+    // On récupère le spectacle avec ses reviews, les utilisateurs associés et les artistes
+    $show = Show::with(['reviews.user', 'artistTypes.artist', 'artistTypes.type'])->findOrFail($id);
 
     $canReview = false;
 

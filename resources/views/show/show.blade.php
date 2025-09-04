@@ -15,6 +15,36 @@
 
     <p>{{ $show->description }}</p>
 
+    <!-- Informations sur les artistes -->
+    @if($show->artistTypes->count() > 0)
+        <h3>Artistes</h3>
+        <div class="artists-section">
+            @php
+                $artistsByType = [];
+                foreach($show->artistTypes as $artistType) {
+                    $typeName = $artistType->type->type;
+                    if (!isset($artistsByType[$typeName])) {
+                        $artistsByType[$typeName] = [];
+                    }
+                    $artistsByType[$typeName][] = $artistType->artist;
+                }
+            @endphp
+            
+            @foreach($artistsByType as $typeName => $artists)
+                <div class="artist-type-group" style="margin-bottom: 15px;">
+                    <h4 style="color: #666; margin-bottom: 5px;">{{ ucfirst($typeName) }}{{ count($artists) > 1 ? 's' : '' }}</h4>
+                    <ul style="list-style: none; padding-left: 0;">
+                        @foreach($artists as $artist)
+                            <li style="margin-bottom: 5px; padding-left: 20px;">
+                                <strong>{{ $artist->firstname }} {{ $artist->lastname }}</strong>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endforeach
+        </div>
+    @endif
+
     @if($show->reviews->count() > 0)
         <h3>Commentaires des spectateurs</h3>
         <ul>

@@ -27,9 +27,18 @@ class Show extends Model implements Feedable
     
     public $timestamps = false;
 
-    public function artistTypes() : BelongsTo
+    public function artistTypes(): BelongsToMany
     {
-        return $this->belongsTo(ArtistType::class);
+        return $this->belongsToMany(ArtistType::class, 'artist_type_show');
+    }
+
+    public function artists()
+    {
+        return $this->belongsToMany(Artist::class, 'artist_type_show', 'show_id', 'artist_type_id')
+            ->join('artist_type', 'artist_type_show.artist_type_id', '=', 'artist_type.id')
+            ->join('artists', 'artist_type.artist_id', '=', 'artists.id')
+            ->select('artists.*', 'types.type as artist_type')
+            ->join('types', 'artist_type.type_id', '=', 'types.id');
     }
 
     /**

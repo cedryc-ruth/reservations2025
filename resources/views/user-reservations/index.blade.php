@@ -27,6 +27,118 @@
         </div>
     @endif
 
+    <!-- Statistiques rapides -->
+    <div class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number">{{ $stats['total'] }}</span>
+                <span class="stat-label">Total</span>
+            </div>
+            <div class="stat-item pending">
+                <span class="stat-number">{{ $stats['pending'] }}</span>
+                <span class="stat-label">En attente</span>
+            </div>
+            <div class="stat-item paid">
+                <span class="stat-number">{{ $stats['paid'] }}</span>
+                <span class="stat-label">Payées</span>
+            </div>
+            <div class="stat-item cancelled">
+                <span class="stat-number">{{ $stats['cancelled'] }}</span>
+                <span class="stat-label">Annulées</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtres de recherche -->
+    <div class="filters-section">
+        <h3>🔍 Rechercher et filtrer</h3>
+        <form method="GET" action="{{ route('user-reservations.index') }}" class="filters-form">
+            <div class="filters-grid">
+                <!-- Recherche par spectacle -->
+                <div class="filter-group">
+                    <label for="show_search">Spectacle :</label>
+                    <input type="text" 
+                           name="show_search" 
+                           id="show_search" 
+                           value="{{ request('show_search') }}"
+                           placeholder="Nom du spectacle...">
+                </div>
+
+                <!-- Filtre par statut -->
+                <div class="filter-group">
+                    <label for="status">Statut :</label>
+                    <select name="status" id="status">
+                        <option value="">Tous les statuts</option>
+                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>En attente</option>
+                        <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Payé</option>
+                        <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Annulé</option>
+                    </select>
+                </div>
+
+                <!-- Date de réservation -->
+                <div class="filter-group">
+                    <label for="date_from">Réservé du :</label>
+                    <input type="date" 
+                           name="date_from" 
+                           id="date_from" 
+                           value="{{ request('date_from') }}">
+                </div>
+
+                <div class="filter-group">
+                    <label for="date_to">Réservé au :</label>
+                    <input type="date" 
+                           name="date_to" 
+                           id="date_to" 
+                           value="{{ request('date_to') }}">
+                </div>
+
+                <!-- Date de spectacle -->
+                <div class="filter-group">
+                    <label for="show_date_from">Spectacle du :</label>
+                    <input type="date" 
+                           name="show_date_from" 
+                           id="show_date_from" 
+                           value="{{ request('show_date_from') }}">
+                </div>
+
+                <div class="filter-group">
+                    <label for="show_date_to">Spectacle au :</label>
+                    <input type="date" 
+                           name="show_date_to" 
+                           id="show_date_to" 
+                           value="{{ request('show_date_to') }}">
+                </div>
+
+                <!-- Tri -->
+                <div class="filter-group">
+                    <label for="sort_by">Trier par :</label>
+                    <select name="sort_by" id="sort_by">
+                        <option value="booking_date" {{ request('sort_by') == 'booking_date' ? 'selected' : '' }}>Date de réservation</option>
+                        <option value="show_date" {{ request('sort_by') == 'show_date' ? 'selected' : '' }}>Date du spectacle</option>
+                        <option value="total_amount" {{ request('sort_by') == 'total_amount' ? 'selected' : '' }}>Montant</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sort_order">Ordre :</label>
+                    <select name="sort_order" id="sort_order">
+                        <option value="desc" {{ request('sort_order') == 'desc' ? 'selected' : '' }}>Décroissant</option>
+                        <option value="asc" {{ request('sort_order') == 'asc' ? 'selected' : '' }}>Croissant</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-actions">
+                <button type="submit" class="btn btn-primary">
+                    🔍 Rechercher
+                </button>
+                <a href="{{ route('user-reservations.index') }}" class="btn btn-secondary">
+                    🗑️ Effacer les filtres
+                </a>
+            </div>
+        </form>
+    </div>
+
     @if($reservations->count() > 0)
         <div class="reservations-list">
             @foreach($reservations as $reservation)
@@ -122,6 +234,138 @@
 </div>
 
 <style>
+/* Statistiques */
+.stats-section {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.stat-item.pending {
+    border-color: #ffc107;
+}
+
+.stat-item.paid {
+    border-color: #28a745;
+}
+
+.stat-item.cancelled {
+    border-color: #dc3545;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.stat-item.pending .stat-number {
+    color: #856404;
+}
+
+.stat-item.paid .stat-number {
+    color: #155724;
+}
+
+.stat-item.cancelled .stat-number {
+    color: #721c24;
+}
+
+.stat-label {
+    font-size: 0.9em;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Filtres */
+.filters-section {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.filters-section h3 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: #333;
+    border-bottom: 2px solid #007cba;
+    padding-bottom: 0.5rem;
+}
+
+.filters-form {
+    width: 100%;
+}
+
+.filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-size: 0.9em;
+}
+
+.filter-group input,
+.filter-group select {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9em;
+    transition: border-color 0.3s ease;
+}
+
+.filter-group input:focus,
+.filter-group select:focus {
+    outline: none;
+    border-color: #007cba;
+    box-shadow: 0 0 0 2px rgba(0, 124, 186, 0.2);
+}
+
+.filter-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
 .reservations-list {
     display: grid;
     gap: 1.5rem;
@@ -336,5 +580,77 @@ function downloadTicket(reservationId) {
     // Rediriger vers la route de téléchargement
     window.location.href = `/user-reservations/${reservationId}/download-ticket`;
 }
+
+// Amélioration de l'expérience utilisateur
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-submit du formulaire lors du changement des filtres
+    const filterInputs = document.querySelectorAll('#status, #sort_by, #sort_order');
+    filterInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            // Délai pour éviter trop de requêtes
+            setTimeout(() => {
+                this.form.submit();
+            }, 300);
+        });
+    });
+
+    // Validation des dates
+    const dateFrom = document.getElementById('date_from');
+    const dateTo = document.getElementById('date_to');
+    const showDateFrom = document.getElementById('show_date_from');
+    const showDateTo = document.getElementById('show_date_to');
+
+    function validateDateRange(fromInput, toInput) {
+        if (fromInput.value && toInput.value) {
+            if (new Date(fromInput.value) > new Date(toInput.value)) {
+                toInput.setCustomValidity('La date de fin doit être après la date de début');
+            } else {
+                toInput.setCustomValidity('');
+            }
+        }
+    }
+
+    if (dateFrom && dateTo) {
+        dateFrom.addEventListener('change', () => validateDateRange(dateFrom, dateTo));
+        dateTo.addEventListener('change', () => validateDateRange(dateFrom, dateTo));
+    }
+
+    if (showDateFrom && showDateTo) {
+        showDateFrom.addEventListener('change', () => validateDateRange(showDateFrom, showDateTo));
+        showDateTo.addEventListener('change', () => validateDateRange(showDateFrom, showDateTo));
+    }
+
+    // Animation des statistiques
+    const statNumbers = document.querySelectorAll('.stat-number');
+    statNumbers.forEach(stat => {
+        const finalValue = parseInt(stat.textContent);
+        let currentValue = 0;
+        const increment = finalValue / 20;
+        
+        const timer = setInterval(() => {
+            currentValue += increment;
+            if (currentValue >= finalValue) {
+                stat.textContent = finalValue;
+                clearInterval(timer);
+            } else {
+                stat.textContent = Math.floor(currentValue);
+            }
+        }, 50);
+    });
+
+    // Recherche en temps réel pour le nom du spectacle
+    const showSearchInput = document.getElementById('show_search');
+    if (showSearchInput) {
+        let searchTimeout;
+        showSearchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                if (this.value.length >= 2 || this.value.length === 0) {
+                    this.form.submit();
+                }
+            }, 500);
+        });
+    }
+});
 </script>
 @endsection

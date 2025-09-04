@@ -9,22 +9,77 @@ use Illuminate\Support\Facades\Auth;
 class UserReservationController extends Controller
 {
     /**
-     * Afficher toutes les réservations de l'utilisateur connecté
+     * Afficher toutes les réservations de l'utilisateur connecté avec filtres
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         
-        $reservations = Reservation::with([
+        $query = Reservation::with([
             'representationReservations.representation.show',
             'representationReservations.representation.location',
             'representationReservations.price'
         ])
-        ->where('user_id', $user->id)
-        ->orderBy('booking_date', 'desc')
-        ->get();
+        ->where('user_id', $user->id);
 
-        return view('user-reservations.index', compact('reservations', 'user'));
+        // Filtre par statut
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filtre par date de réservation
+        if ($request->filled('date_from')) {
+            $query->whereDate('booking_date', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('booking_date', '<=', $request->date_to);
+        }
+
+        // Filtre par nom de spectacle
+        if ($request->filled('show_search')) {
+            $query->whereHas('representationReservations.representation.show', function($q) use ($request) {
+                $q->where('title', 'like', '%' . $request->show_search . '%');
+            });
+        }
+
+        // Filtre par date de spectacle
+        if ($request->filled('show_date_from')) {
+            $query->whereHas('representationReservations.representation', function($q) use ($request) {
+                $q->whereDate('schedule', '>=', $request->show_date_from);
+            });
+        }
+
+        if ($request->filled('show_date_to')) {
+            $query->whereHas('representationReservations.representation', function($q) use ($request) {
+                $q->whereDate('schedule', '<=', $request->show_date_to);
+            });
+        }
+
+        // Tri
+        $sortBy = $request->get('sort_by', 'booking_date');
+        $sortOrder = $request->get('sort_order', 'desc');
+        
+        if ($sortBy === 'show_date') {
+            $query->join('representation_reservation', 'reservations.id', '=', 'representation_reservation.reservation_id')
+                  ->join('representations', 'representation_reservation.representation_id', '=', 'representations.id')
+                  ->orderBy('representations.schedule', $sortOrder)
+                  ->select('reservations.*');
+        } else {
+            $query->orderBy($sortBy, $sortOrder);
+        }
+
+        $reservations = $query->get();
+
+        // Statistiques pour les filtres
+        $stats = [
+            'total' => Reservation::where('user_id', $user->id)->count(),
+            'pending' => Reservation::where('user_id', $user->id)->where('status', 'pending')->count(),
+            'paid' => Reservation::where('user_id', $user->id)->where('status', 'paid')->count(),
+            'cancelled' => Reservation::where('user_id', $user->id)->where('status', 'cancelled')->count(),
+        ];
+
+        return view('user-reservations.index', compact('reservations', 'user', 'stats'));
     }
 
     /**

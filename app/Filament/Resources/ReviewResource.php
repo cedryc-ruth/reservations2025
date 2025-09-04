@@ -28,7 +28,8 @@ class ReviewResource extends Resource
         return $form->schema([
             Forms\Components\Select::make('user_id')
                 ->label('Utilisateur')
-                ->relationship('user', 'name')
+                ->relationship('user', 'firstname')
+                ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->firstname} {$record->lastname} ({$record->email})")
                 ->required(),
 
             Forms\Components\Select::make('show_id')
@@ -58,7 +59,15 @@ class ReviewResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')->label('Utilisateur'),
+                Tables\Columns\TextColumn::make('user.firstname')
+                    ->label('Prénom')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('user.lastname')
+                    ->label('Nom')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('user.email')
+                    ->label('Email')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('show.title')->label('Spectacle'),
                 Tables\Columns\TextColumn::make('stars')->label('Note'),
                 Tables\Columns\TextColumn::make('review')->limit(50)->label('Commentaire'),

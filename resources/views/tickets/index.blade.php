@@ -1,200 +1,272 @@
 @extends('layouts.app')
 
-@section('title', 'Mes tickets')
+@section('title', 'Mes Tickets')
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
-    <div class="max-w-6xl mx-auto">
-        <!-- En-tête -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Mes tickets</h1>
-            <p class="text-gray-600">Gérez tous vos tickets et réservations</p>
+    <!-- En-tête de la page -->
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">Mes Tickets</h1>
+        <p class="text-lg text-gray-600">Gérez et consultez tous vos billets de spectacle</p>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white rounded-lg shadow p-4 text-center">
+            <div class="text-2xl font-bold text-blue-600">{{ $tickets->where('status', 'paid')->count() }}</div>
+            <div class="text-sm text-gray-600">Tickets payés</div>
         </div>
+        <div class="bg-white rounded-lg shadow p-4 text-center">
+            <div class="text-2xl font-bold text-yellow-600">{{ $tickets->where('status', 'pending')->count() }}</div>
+            <div class="text-sm text-gray-600">En attente</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 text-center">
+            <div class="text-2xl font-bold text-green-600">{{ $tickets->where('status', 'used')->count() }}</div>
+            <div class="text-sm text-gray-600">Utilisés</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 text-center">
+            <div class="text-2xl font-bold text-red-600">{{ $tickets->where('status', 'cancelled')->count() }}</div>
+            <div class="text-sm text-gray-600">Annulés</div>
+        </div>
+    </div>
 
-        @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        <!-- Statistiques -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <div class="flex items-center">
-                    <div class="p-2 bg-blue-100 rounded-lg">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Total tickets</p>
-                        <p class="text-2xl font-semibold text-gray-900">{{ $tickets->total() }}</p>
-                    </div>
+    @if($tickets->count() > 0)
+        <!-- Filtres et recherche -->
+        <div class="bg-white rounded-lg shadow p-4 mb-6">
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+                <div class="flex-1">
+                    <input type="text" 
+                           id="searchInput" 
+                           placeholder="Rechercher un spectacle..." 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
-            </div>
-
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <div class="flex items-center">
-                    <div class="p-2 bg-green-100 rounded-lg">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Payés</p>
-                        <p class="text-2xl font-semibold text-gray-900">{{ $tickets->where('status', 'paid')->count() }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <div class="flex items-center">
-                    <div class="p-2 bg-yellow-100 rounded-lg">
-                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">En attente</p>
-                        <p class="text-2xl font-semibold text-gray-900">{{ $tickets->where('status', 'pending')->count() }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <div class="flex items-center">
-                    <div class="p-2 bg-red-100 rounded-lg">
-                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Annulés</p>
-                        <p class="text-2xl font-semibold text-gray-900">{{ $tickets->where('status', 'cancelled')->count() }}</p>
-                    </div>
+                <div class="flex gap-2">
+                    <select id="statusFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <option value="">Tous les statuts</option>
+                        <option value="pending">En attente</option>
+                        <option value="paid">Payé</option>
+                        <option value="used">Utilisé</option>
+                        <option value="cancelled">Annulé</option>
+                    </select>
+                    <button onclick="clearFilters()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                        Réinitialiser
+                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Liste des tickets -->
-        @if($tickets->count() > 0)
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <div class="px-6 py-4 border-b border-gray-200">
-                    <h2 class="text-lg font-semibold text-gray-900">Historique des tickets</h2>
-                </div>
-                
-                <div class="divide-y divide-gray-200">
-                    @foreach($tickets as $ticket)
-                        <div class="p-6 hover:bg-gray-50">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-4">
-                                    @if($ticket->representation->show->poster_url)
-                                        <img src="{{ asset('images/' . $ticket->representation->show->poster_url) }}" 
-                                             alt="{{ $ticket->representation->show->title }}" 
-                                             class="w-16 h-24 object-cover rounded-lg">
-                                    @else
-                                        <div class="w-16 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
-                                            <span class="text-gray-400 text-xs">Aucune image</span>
-                                        </div>
-                                    @endif
-                                    
-                                    <div>
-                                        <h3 class="font-semibold text-gray-900">{{ $ticket->representation->show->title }}</h3>
-                                        <p class="text-sm text-gray-600">
-                                            {{ \Carbon\Carbon::parse($ticket->representation->schedule)->format('d/m/Y à H:i') }}
-                                        </p>
-                                        <p class="text-sm text-gray-600">
-                                            {{ $ticket->representation->location->designation ?? 'Lieu non spécifié' }}
-                                        </p>
-                                        <div class="flex items-center space-x-4 mt-2 text-sm">
-                                            <span class="text-gray-600">{{ $ticket->price->type }}</span>
-                                            <span class="text-gray-600">{{ $ticket->quantity }} ticket(s)</span>
-                                            <span class="font-medium text-gray-900">{{ number_format($ticket->total_price, 2) }}€</span>
-                                        </div>
+        <div class="space-y-4">
+            @foreach($tickets as $ticket)
+                <div class="ticket-card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                     data-show-title="{{ strtolower($ticket->representation->show->title) }}"
+                     data-status="{{ $ticket->status }}">
+                    
+                    <!-- En-tête de la carte -->
+                    <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="text-xl font-semibold text-white">{{ $ticket->representation->show->title }}</h3>
+                                <p class="text-blue-100">{{ \Carbon\Carbon::parse($ticket->representation->schedule)->format('d/m/Y à H:i') }}</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
+                                    @if($ticket->status === 'paid') bg-green-100 text-green-800
+                                    @elseif($ticket->status === 'pending') bg-yellow-100 text-yellow-800
+                                    @elseif($ticket->status === 'used') bg-blue-100 text-blue-800
+                                    @else bg-red-100 text-red-800
+                                    @endif">
+                                    @switch($ticket->status)
+                                        @case('pending')
+                                            ⏳ En attente
+                                            @break
+                                        @case('paid')
+                                            ✅ Payé
+                                            @break
+                                        @case('used')
+                                            🎭 Utilisé
+                                            @break
+                                        @case('cancelled')
+                                            ❌ Annulé
+                                            @break
+                                    @endswitch
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contenu de la carte -->
+                    <div class="p-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Informations du spectacle -->
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-3">Informations du spectacle</h4>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">Lieu:</span>
+                                        <span class="font-medium">{{ $ticket->representation->location->designation }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">Tarif:</span>
+                                        <span class="font-medium">{{ $ticket->price->type }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">Quantité:</span>
+                                        <span class="font-medium">{{ $ticket->quantity }} ticket(s)</span>
                                     </div>
                                 </div>
-                                
-                                <div class="flex items-center space-x-3">
-                                    <!-- Statut -->
-                                    <div class="text-right">
-                                        @if($ticket->status === 'paid')
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                Payé
-                                            </span>
-                                        @elseif($ticket->status === 'pending')
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                En attente
-                                            </span>
-                                        @elseif($ticket->status === 'cancelled')
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                Annulé
-                                            </span>
-                                        @elseif($ticket->status === 'used')
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                Utilisé
-                                            </span>
-                                        @endif
+                            </div>
+
+                            <!-- Informations de paiement -->
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-3">Informations de paiement</h4>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">Prix unitaire:</span>
+                                        <span class="font-medium">{{ number_format($ticket->price->price, 2) }} €</span>
                                     </div>
-                                    
-                                    <!-- Actions -->
-                                    <div class="flex space-x-2">
-                                        <a href="{{ route('tickets.show', $ticket->id) }}" 
-                                           class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                            Voir détails
-                                        </a>
-                                        
-                                        @if($ticket->status === 'pending')
-                                            <a href="{{ route('tickets.payment', $ticket->id) }}" 
-                                               class="text-green-600 hover:text-green-800 text-sm font-medium">
-                                                Payer
-                                            </a>
-                                        @endif
-                                        
-                                        @if($ticket->status === 'pending' || $ticket->status === 'paid')
-                                            <form action="{{ route('tickets.cancel', $ticket->id) }}" method="POST" class="inline">
-                                                @csrf
-                                                <button type="submit" 
-                                                        onclick="return confirm('Êtes-vous sûr de vouloir annuler ce ticket ?')"
-                                                        class="text-red-600 hover:text-red-800 text-sm font-medium">
-                                                    Annuler
-                                                </button>
-                                            </form>
-                                        @endif
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">Total payé:</span>
+                                        <span class="font-bold text-lg text-green-600">{{ number_format($ticket->total_price, 2) }} €</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">Acheté le:</span>
+                                        <span class="font-medium">{{ $ticket->created_at->format('d/m/Y à H:i') }}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-                </div>
-                
-                <!-- Pagination -->
-                @if($tickets->hasPages())
-                    <div class="px-6 py-4 border-t border-gray-200">
-                        {{ $tickets->links() }}
+
+                        <!-- Actions -->
+                        <div class="flex flex-wrap gap-3 mt-6 pt-4 border-t border-gray-200">
+                            <a href="{{ route('tickets.show', $ticket->id) }}" 
+                               class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200">
+                                📋 Voir le détail
+                            </a>
+                            
+                            @if($ticket->status === 'pending')
+                                <a href="{{ route('tickets.payment', $ticket->id) }}" 
+                                   class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200">
+                                    💳 Payer maintenant
+                                </a>
+                            @endif
+                            
+                            @if($ticket->status === 'paid' && \Carbon\Carbon::parse($ticket->representation->schedule)->isFuture())
+                                <form action="{{ route('tickets.cancel', $ticket->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" 
+                                            onclick="return confirm('Êtes-vous sûr de vouloir annuler ce ticket ?')"
+                                            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200">
+                                        ❌ Annuler
+                                    </button>
+                                </form>
+                            @endif
+                            
+                            @if($ticket->status === 'paid')
+                                <a href="{{ route('show.show', $ticket->representation->show->id) }}" 
+                                   class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200">
+                                    🎭 Voir le spectacle
+                                </a>
+                            @endif
+                        </div>
                     </div>
-                @endif
-            </div>
-        @else
-            <div class="bg-white rounded-lg shadow-md p-12 text-center">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
-                </svg>
-                <h3 class="mt-2 text-sm font-medium text-gray-900">Aucun ticket</h3>
-                <p class="mt-1 text-sm text-gray-500">Vous n'avez pas encore acheté de tickets.</p>
-                <div class="mt-6">
-                    <a href="{{ route('show.index') }}" 
-                       class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-                        Découvrir les spectacles
-                    </a>
                 </div>
+            @endforeach
+        </div>
+
+        <!-- Pagination -->
+        @if($tickets->hasPages())
+            <div class="mt-8">
+                {{ $tickets->links() }}
             </div>
         @endif
-    </div>
+
+    @else
+        <!-- Message si aucun ticket -->
+        <div class="text-center py-12">
+            <div class="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Aucun ticket trouvé</h3>
+            <p class="text-gray-600 mb-6">Vous n'avez pas encore acheté de tickets de spectacle.</p>
+            <a href="{{ route('show.index') }}" 
+               class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition duration-200">
+                Découvrir des spectacles
+            </a>
+        </div>
+    @endif
 </div>
+
+<script>
+// Filtrage des tickets
+function filterTickets() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value;
+    const tickets = document.querySelectorAll('.ticket-card');
+    
+    tickets.forEach(ticket => {
+        const showTitle = ticket.dataset.showTitle;
+        const status = ticket.dataset.status;
+        
+        const matchesSearch = showTitle.includes(searchTerm);
+        const matchesStatus = !statusFilter || status === statusFilter;
+        
+        if (matchesSearch && matchesStatus) {
+            ticket.style.display = 'block';
+        } else {
+            ticket.style.display = 'none';
+        }
+    });
+}
+
+function clearFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('statusFilter').value = '';
+    filterTickets();
+}
+
+// Événements
+document.getElementById('searchInput').addEventListener('input', filterTickets);
+document.getElementById('statusFilter').addEventListener('change', filterTickets);
+
+// Initialisation
+document.addEventListener('DOMContentLoaded', function() {
+    filterTickets();
+});
+</script>
+
+<style>
+.container {
+    max-width: 1200px;
+}
+
+.bg-gradient-to-r {
+    background: linear-gradient(to right, #2563eb, #7c3aed);
+}
+
+.ticket-card {
+    transition: all 0.3s ease;
+}
+
+.ticket-card:hover {
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .flex-wrap {
+        flex-wrap: wrap;
+    }
+}
+</style>
 @endsection

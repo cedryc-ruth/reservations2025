@@ -67,14 +67,29 @@ class TicketController extends Controller
                 'purchased_at' => now(),
             ]);
 
+            // Charger les relations nécessaires pour Stripe
+            $ticket->load(['representation.show', 'price']);
+
             DB::commit();
+
+            // Debug: afficher les informations du ticket
+            \Log::info('Ticket créé avec succès', [
+                'ticket_id' => $ticket->id,
+                'total_price' => $ticket->total_price,
+                'representation_id' => $ticket->representation_id,
+                'price_id' => $ticket->price_id,
+            ]);
 
             // Créer une session Stripe Checkout
             return $this->createStripeCheckoutSession($ticket);
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Une erreur est survenue lors de l\'achat des tickets.');
+            \Log::error('Erreur lors de la création du ticket', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return back()->with('error', 'Une erreur est survenue lors de l\'achat des tickets: ' . $e->getMessage());
         }
     }
 
@@ -87,6 +102,14 @@ class TicketController extends Controller
         Stripe::setApiKey(config('stripe.secret_key'));
 
         try {
+            // Debug: afficher les informations
+            \Log::info('Création session Stripe pour ticket', [
+                'ticket_id' => $ticket->id,
+                'total_price' => $ticket->total_price,
+                'show_title' => $ticket->representation->show->title,
+                'schedule' => $ticket->representation->schedule,
+            ]);
+
             $session = Session::create([
                 'payment_method_types' => config('stripe.payment_method_types', ['card']),
                 'line_items' => [[
@@ -98,9 +121,9 @@ class TicketController extends Controller
                                            ' - ' . \Carbon\Carbon::parse($ticket->representation->schedule)->format('d/m/Y à H:i') .
                                            config('stripe.product_description_suffix', ' - Spectacle'),
                         ],
+                        'unit_amount' => (int)($ticket->total_price * 100), // Stripe utilise les centimes
                     ],
-                    'unit_amount' => (int)($ticket->total_price * 100), // Stripe utilise les centimes
-                    'quantity' => 1,
+                    'quantity' => $ticket->quantity,
                 ]],
                 'mode' => 'payment',
                 'success_url' => route('tickets.success', $ticket->id) . '?session_id={CHECKOUT_SESSION_ID}',
@@ -112,9 +135,19 @@ class TicketController extends Controller
                 ],
             ]);
 
+            \Log::info('Session Stripe créée avec succès', [
+                'session_id' => $session->id,
+                'url' => $session->url,
+            ]);
+
             return redirect($session->url);
 
         } catch (\Exception $e) {
+            \Log::error('Erreur lors de la création de la session Stripe', [
+                'error' => $e->getMessage(),
+                'ticket_id' => $ticket->id,
+            ]);
+            
             return back()->with('error', 'Erreur lors de la création de la session de paiement: ' . $e->getMessage());
         }
     }

@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             ReviewSeeder::class,
             UserRoleSeeder::class,
             TicketSeeder::class,
+            ShowPriceSeeder::class,
         ]);
     }
 }

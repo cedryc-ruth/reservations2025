@@ -1,142 +1,139 @@
 @extends('layouts.app')
 
-@section('title', 'Paiement confirmé')
+@section('title', 'Paiement confirmé - ' . $ticket->representation->show->title)
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
+    <!-- En-tête de succès -->
+    <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Paiement confirmé</h1>
+        <p class="text-lg text-gray-600">Votre commande a été traitée avec succès</p>
+    </div>
+
+    <!-- Carte principale -->
     <div class="max-w-3xl mx-auto">
-        <!-- Message de succès -->
-        <div class="text-center mb-8">
-            <div class="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
+        <div class="bg-white rounded-lg shadow-md border border-gray-200">
+            <!-- En-tête de la carte -->
+            <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-900">Détails de votre commande</h2>
+                <p class="text-gray-600 text-sm">Référence: #{{ $ticket->id }}</p>
             </div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Paiement confirmé !</h1>
-            <p class="text-xl text-green-600 font-medium">Vos tickets ont été achetés avec succès</p>
-        </div>
 
-        <!-- Détails de la transaction -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-4">Détails de votre commande</h2>
-            
-            <div class="space-y-4">
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-700">Numéro de commande :</span>
-                    <span class="font-mono text-gray-900">#{{ str_pad($ticket->id, 6, '0', STR_PAD_LEFT) }}</span>
-                </div>
-                
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-700">Référence de paiement :</span>
-                    <span class="font-mono text-gray-900">{{ $ticket->payment_reference ?? 'N/A' }}</span>
-                </div>
-                
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-700">Date d'achat :</span>
-                    <span class="text-gray-900">{{ $ticket->purchased_at ? $ticket->purchased_at->format('d/m/Y à H:i') : 'Maintenant' }}</span>
-                </div>
-                
-                <div class="flex justify-between items-center">
-                    <span class="text-gray-700">Méthode de paiement :</span>
-                    <span class="text-gray-900 capitalize">{{ $ticket->payment_method ?? 'Stripe' }}</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Informations du spectacle -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-4">Vos tickets</h2>
-            
-            <div class="flex items-start space-x-4">
-                @if($ticket->representation->show->poster_url)
-                    <img src="{{ asset('images/' . $ticket->representation->show->poster_url) }}" 
-                         alt="{{ $ticket->representation->show->title }}" 
-                         class="w-24 h-36 object-cover rounded-lg">
-                @else
-                    <div class="w-24 h-36 bg-gray-200 rounded-lg flex items-center justify-center">
-                        <span class="text-gray-400 text-xs">Aucune image</span>
+            <!-- Contenu de la carte -->
+            <div class="p-6">
+                <!-- Informations du spectacle -->
+                <div class="grid md:grid-cols-2 gap-8 mb-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Spectacle</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <span class="text-gray-600 text-sm">Titre</span>
+                                <p class="font-medium text-gray-900">{{ $ticket->representation->show->title }}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-600 text-sm">Date et heure</span>
+                                <p class="font-medium text-gray-900">{{ \Carbon\Carbon::parse($ticket->representation->schedule)->format('d/m/Y à H:i') }}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-600 text-sm">Lieu</span>
+                                <p class="font-medium text-gray-900">{{ $ticket->representation->location->designation }}</p>
+                            </div>
+                        </div>
                     </div>
-                @endif
-                
-                <div class="flex-1">
-                    <h3 class="font-semibold text-gray-900 text-lg">{{ $ticket->representation->show->title }}</h3>
-                    <p class="text-sm text-gray-600 mt-1">{{ $ticket->representation->show->description }}</p>
-                    
-                    <div class="grid grid-cols-2 gap-4 mt-4 text-sm">
-                        <div>
-                            <span class="font-medium text-gray-700">Date et heure :</span>
-                            <p class="text-gray-900">{{ \Carbon\Carbon::parse($ticket->representation->schedule)->format('d/m/Y à H:i') }}</p>
-                        </div>
-                        
-                        <div>
-                            <span class="font-medium text-gray-700">Lieu :</span>
-                            <p class="text-gray-900">{{ $ticket->representation->location->designation ?? 'Non spécifié' }}</p>
-                        </div>
-                        
-                        <div>
-                            <span class="font-medium text-gray-700">Tarif :</span>
-                            <p class="text-gray-900">{{ $ticket->price->type }}</p>
-                        </div>
-                        
-                        <div>
-                            <span class="font-medium text-gray-700">Quantité :</span>
-                            <p class="text-gray-900">{{ $ticket->quantity }} ticket(s)</p>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Détails de l'achat</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <span class="text-gray-600 text-sm">Tarif</span>
+                                <p class="font-medium text-gray-900">{{ $ticket->price->type }}</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-600 text-sm">Quantité</span>
+                                <p class="font-medium text-gray-900">{{ $ticket->quantity }} ticket(s)</p>
+                            </div>
+                            <div>
+                                <span class="text-gray-600 text-sm">Prix unitaire</span>
+                                <p class="font-medium text-gray-900">{{ number_format($ticket->price->price, 2) }} €</p>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Résumé du paiement -->
+                <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-700 font-medium">Total payé</span>
+                        <span class="text-2xl font-bold text-gray-900">{{ number_format($ticket->total_price, 2) }} €</span>
+                    </div>
+                    <div class="text-sm text-gray-500 mt-1">
+                        Paiement effectué via Stripe
+                        @if(isset($session) && $session->payment_intent)
+                            <br>Référence: {{ $session->payment_intent }}
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Informations importantes -->
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                    <h3 class="text-sm font-medium text-blue-900 mb-2">Informations importantes</h3>
+                    <ul class="text-sm text-blue-800 space-y-1">
+                        <li>• Conservez cette confirmation pour votre dossier</li>
+                        <li>• Présentez votre billet à l'entrée du spectacle</li>
+                        <li>• Arrivez 15 minutes avant le début du spectacle</li>
+                        <li>• En cas de problème, contactez-nous au 01 23 45 67 89</li>
+                    </ul>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <a href="{{ route('tickets.show', $ticket->id) }}" 
+                       class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded text-center transition duration-200">
+                        Voir le détail du ticket
+                    </a>
+                    <a href="{{ route('tickets.index') }}" 
+                       class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded text-center transition duration-200">
+                        Mes tickets
+                    </a>
+                    <a href="{{ route('show.show', $ticket->representation->show->id) }}" 
+                       class="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded text-center transition duration-200">
+                        Retour au spectacle
+                    </a>
+                </div>
             </div>
-            
-            <hr class="my-4">
-            
-            <div class="flex justify-between items-center">
-                <span class="text-lg font-semibold text-gray-900">Total payé :</span>
-                <span class="text-2xl font-bold text-green-600">{{ number_format($ticket->total_price, 2) }}€</span>
-            </div>
         </div>
 
-        <!-- Informations importantes -->
-        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-            <h3 class="text-lg font-semibold text-blue-900 mb-3">Informations importantes</h3>
-            <ul class="space-y-2 text-blue-800">
-                <li class="flex items-start">
-                    <svg class="w-5 h-5 mr-2 mt-0.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <span>Vos tickets vous seront envoyés par email dans les prochaines minutes</span>
-                </li>
-                <li class="flex items-start">
-                    <svg class="w-5 h-5 mr-2 mt-0.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <span>Présentez vos tickets à l'entrée du spectacle</span>
-                </li>
-                <li class="flex items-start">
-                    <svg class="w-5 h-5 mr-2 mt-0.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <span>Vous pouvez annuler vos tickets jusqu'à 24h avant le spectacle</span>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Actions -->
-        <div class="flex justify-between items-center">
-            <a href="{{ route('tickets.show', $ticket->id) }}" 
-               class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                Voir mes tickets
-            </a>
-            
-            <a href="{{ route('show.index') }}" 
-               class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">
-                Découvrir d'autres spectacles
-            </a>
-        </div>
-
-        <!-- Remerciements -->
-        <div class="text-center mt-8 text-gray-600">
-            <p>Merci de votre confiance !</p>
-            <p class="mt-1">Nous vous souhaitons un excellent spectacle.</p>
+        <!-- Message de remerciement -->
+        <div class="text-center mt-8">
+            <p class="text-gray-600">Merci de votre confiance ! Nous espérons que vous apprécierez le spectacle.</p>
+            <p class="text-sm text-gray-500 mt-2">Un email de confirmation vous a été envoyé.</p>
         </div>
     </div>
 </div>
+
+<style>
+.container {
+    max-width: 1200px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .flex-col {
+        flex-direction: column;
+    }
+}
+</style>
 @endsection

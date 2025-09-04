@@ -11,6 +11,8 @@ class Reservation extends Model
         'user_id',
         'status',
         'total_amount',
+        'stripe_session_id',
+        'stripe_payment_intent_id',
     ];
 
     protected $table = 'reservations';

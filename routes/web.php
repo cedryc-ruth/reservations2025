@@ -71,8 +71,13 @@ Route::get('/shows/{id}', [ShowController::class, 'show'])->name('show.show');
 
 // BOOKING
 Route::get('/booking/{showId}', [App\Http\Controllers\BookingController::class, 'showBookingForm'])->name('booking.form');
-Route::post('/booking', [App\Http\Controllers\BookingController::class, 'processBooking'])->name('booking.process');
 Route::get('/booking/confirmation/{reservationId}', [App\Http\Controllers\BookingController::class, 'confirmation'])->name('booking.confirmation');
+
+// PAYMENT
+Route::post('/payment/create', [App\Http\Controllers\PaymentController::class, 'createPaymentSession'])->name('payment.create');
+Route::get('/payment/success/{reservation}', [App\Http\Controllers\PaymentController::class, 'paymentSuccess'])->name('payment.success');
+Route::get('/payment/cancel/{reservation}', [App\Http\Controllers\PaymentController::class, 'paymentCancel'])->name('payment.cancel');
+Route::post('/payment/webhook', [App\Http\Controllers\PaymentController::class, 'webhook'])->name('payment.webhook');
 
 
 // LOCATIONS

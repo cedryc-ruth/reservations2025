@@ -10,7 +10,7 @@
     </header>
 
     <div class="booking-form">
-        <form method="POST" action="{{ route('booking.process') }}" id="bookingForm">
+        <form method="POST" action="{{ route('payment.create') }}" id="bookingForm">
             @csrf
             <input type="hidden" name="show_id" value="{{ $show->id }}">
 
@@ -83,7 +83,7 @@
             <div class="form-actions">
                 <a href="{{ route('show.show', $show->id) }}" class="btn btn-secondary">← Retour au spectacle</a>
                 <button type="submit" class="btn btn-primary" id="book-button" disabled>
-                    Réserver maintenant
+                    💳 Payer avec Stripe
                 </button>
             </div>
         </form>

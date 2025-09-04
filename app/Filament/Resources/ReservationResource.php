@@ -61,7 +61,22 @@ class ReservationResource extends Resource
                 ->label('Email')
                 ->searchable(),
             Tables\Columns\TextColumn::make('user.id')->label('Matricule'),
-            Tables\Columns\TextColumn::make('booking_date')->label('Date')->dateTime('d/m/Y H:i'),
+            Tables\Columns\TextColumn::make('representations.show.title')
+                ->label('Spectacle')
+                ->formatStateUsing(function ($record) {
+                    $shows = $record->representations->pluck('show.title')->unique();
+                    return $shows->implode(', ');
+                })
+                ->limit(50),
+            Tables\Columns\TextColumn::make('representations.schedule')
+                ->label('Date de représentation')
+                ->formatStateUsing(function ($record) {
+                    $schedules = $record->representations->pluck('schedule')->unique();
+                    return $schedules->map(function ($schedule) {
+                        return \Carbon\Carbon::parse($schedule)->format('d/m/Y H:i');
+                    })->implode(', ');
+                }),
+            Tables\Columns\TextColumn::make('booking_date')->label('Date de réservation')->dateTime('d/m/Y H:i'),
             Tables\Columns\TextColumn::make('status')->label('Statut'),
         ])
         ->headerActions([

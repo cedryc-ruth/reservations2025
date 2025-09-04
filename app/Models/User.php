@@ -9,9 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasName;
 use Filament\Panel;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, HasName
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -99,5 +100,13 @@ class User extends Authenticatable implements FilamentUser
     public function hasRole($role)
     {
         return $this->roles()->where('role', $role)->exists();
+    }
+
+    /**
+     * Get the user's full name for Filament.
+     */
+    public function getFilamentName(): string
+    {
+        return trim($this->firstname . ' ' . $this->lastname);
     }
 }

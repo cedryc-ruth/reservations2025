@@ -171,30 +171,52 @@
                     </div>
 
                     <div class="reservation-details">
-                        @foreach($reservation->representationReservations as $repReservation)
+                        @if($reservation->representationReservations->count() > 0)
+                            @php
+                                // Récupérer les informations du spectacle depuis la première représentation
+                                $firstRepReservation = $reservation->representationReservations->first();
+                                $show = $firstRepReservation->representation->show;
+                                $representation = $firstRepReservation->representation;
+                                $location = $representation->location;
+                                
+                                // Grouper les tickets par type de prix pour éviter la répétition
+                                $ticketsByPrice = $reservation->representationReservations->groupBy('price_id');
+                            @endphp
+                            
                             <div class="show-details">
                                 <div class="show-info">
-                                    <h4>{{ $repReservation->representation->show->title }}</h4>
+                                    <h4>{{ $show->title }}</h4>
                                     <p class="show-date">
-                                        📅 {{ \Carbon\Carbon::parse($repReservation->representation->schedule)->format('d/m/Y à H:i') }}
+                                        📅 {{ \Carbon\Carbon::parse($representation->schedule)->format('d/m/Y à H:i') }}
                                     </p>
                                     <p class="show-location">
-                                        📍 {{ $repReservation->representation->location->designation }}
+                                        📍 {{ $location->designation }}
                                     </p>
                                 </div>
                                 <div class="tickets-info">
-                                    @foreach($reservation->representationReservations as $ticket)
-                                        @if($ticket->representation_id == $repReservation->representation_id)
-                                            <div class="ticket-item">
-                                                <span class="ticket-type">{{ ucfirst($ticket->price->type) }}</span>
-                                                <span class="ticket-quantity">x{{ $ticket->quantity }}</span>
-                                                <span class="ticket-price">€{{ number_format($ticket->price->price * $ticket->quantity, 2) }}</span>
-                                            </div>
-                                        @endif
+                                    @foreach($ticketsByPrice as $priceId => $repReservations)
+                                        @php
+                                            $firstRepReservation = $repReservations->first();
+                                            $price = $firstRepReservation->price;
+                                            $totalQuantity = $repReservations->sum('quantity');
+                                            $subtotal = $price->price * $totalQuantity;
+                                        @endphp
+                                        <div class="ticket-item">
+                                            <span class="ticket-type">{{ ucfirst($price->type) }}</span>
+                                            <span class="ticket-quantity">x{{ $totalQuantity }}</span>
+                                            <span class="ticket-price">€{{ number_format($subtotal, 2) }}</span>
+                                        </div>
                                     @endforeach
                                 </div>
                             </div>
-                        @endforeach
+                        @else
+                            <div class="show-details">
+                                <div class="show-info">
+                                    <h4>⚠️ Aucune représentation trouvée</h4>
+                                    <p class="show-date">Cette réservation n'a pas de représentations associées.</p>
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                     <div class="reservation-actions">

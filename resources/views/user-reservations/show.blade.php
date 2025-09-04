@@ -62,54 +62,94 @@
         <!-- Détails du spectacle -->
         <div class="detail-section">
             <h3>🎭 Détails du spectacle</h3>
-            @foreach($reservation->representationReservations as $repReservation)
+            @if($reservation->representationReservations->count() > 0)
+                @php
+                    // Récupérer les informations du spectacle depuis la première représentation
+                    $firstRepReservation = $reservation->representationReservations->first();
+                    $show = $firstRepReservation->representation->show;
+                    $representation = $firstRepReservation->representation;
+                    $location = $representation->location;
+                @endphp
+                
                 <div class="show-details">
                     <div class="show-poster">
-                        <img src="{{ asset('images/' . $repReservation->representation->show->poster_url) }}" 
-                             alt="{{ $repReservation->representation->show->title }}"
+                        <img src="{{ asset('images/' . $show->poster_url) }}" 
+                             alt="{{ $show->title }}"
                              style="width: 150px; height: 200px; object-fit: cover; border-radius: 8px;">
                     </div>
                     <div class="show-info">
-                        <h4>{{ $repReservation->representation->show->title }}</h4>
-                        <p class="show-description">{{ $repReservation->representation->show->description }}</p>
+                        <h4>{{ $show->title }}</h4>
+                        <p class="show-description">{{ $show->description }}</p>
                         
                         <div class="show-meta">
                             <p><strong>📅 Date du spectacle:</strong> 
-                               {{ \Carbon\Carbon::parse($repReservation->representation->schedule)->format('d/m/Y à H:i') }}</p>
-                            <p><strong>📍 Lieu:</strong> {{ $repReservation->representation->location->designation }}</p>
-                            <p><strong>🏠 Adresse:</strong> {{ $repReservation->representation->location->address }}</p>
-                            <p><strong>⏱️ Durée:</strong> {{ $repReservation->representation->show->duration }} minutes</p>
+                               {{ \Carbon\Carbon::parse($representation->schedule)->format('d/m/Y à H:i') }}</p>
+                            <p><strong>📍 Lieu:</strong> {{ $location->designation }}</p>
+                            <p><strong>🏠 Adresse:</strong> {{ $location->address }}</p>
+                            <p><strong>⏱️ Durée:</strong> {{ $show->duration }} minutes</p>
                         </div>
                     </div>
                 </div>
-            @endforeach
+            @else
+                <div class="show-details">
+                    <div class="show-info">
+                        <h4>⚠️ Aucune représentation trouvée</h4>
+                        <p>Cette réservation n'a pas de représentations associées.</p>
+                    </div>
+                </div>
+            @endif
         </div>
 
         <!-- Détails des tickets -->
         <div class="detail-section">
             <h3>🎫 Vos tickets</h3>
-            <div class="tickets-list">
-                @foreach($reservation->representationReservations as $repReservation)
+            @if($reservation->representationReservations->count() > 0)
+                <div class="tickets-list">
+                    @php
+                        // Grouper les tickets par type de prix pour éviter la répétition
+                        $ticketsByPrice = $reservation->representationReservations->groupBy('price_id');
+                    @endphp
+                    
+                    @foreach($ticketsByPrice as $priceId => $repReservations)
+                        @php
+                            $firstRepReservation = $repReservations->first();
+                            $price = $firstRepReservation->price;
+                            $totalQuantity = $repReservations->sum('quantity');
+                            $subtotal = $price->price * $totalQuantity;
+                        @endphp
+                        
+                        <div class="ticket-card">
+                            <div class="ticket-header">
+                                <h4>{{ ucfirst($price->type) }}</h4>
+                                <span class="ticket-quantity">x{{ $totalQuantity }}</span>
+                            </div>
+                            <div class="ticket-details">
+                                <p><strong>Description:</strong> {{ $price->description }}</p>
+                                <p><strong>Prix unitaire:</strong> €{{ number_format($price->price, 2) }}</p>
+                                <p><strong>Sous-total:</strong> €{{ number_format($subtotal, 2) }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                
+                <div class="total-section">
+                    <div class="total-line">
+                        <strong>Total payé:</strong>
+                        <strong class="total-amount">€{{ number_format($reservation->total_amount, 2) }}</strong>
+                    </div>
+                </div>
+            @else
+                <div class="tickets-list">
                     <div class="ticket-card">
                         <div class="ticket-header">
-                            <h4>{{ ucfirst($repReservation->price->type) }}</h4>
-                            <span class="ticket-quantity">x{{ $repReservation->quantity }}</span>
+                            <h4>⚠️ Aucun ticket trouvé</h4>
                         </div>
                         <div class="ticket-details">
-                            <p><strong>Description:</strong> {{ $repReservation->price->description }}</p>
-                            <p><strong>Prix unitaire:</strong> €{{ number_format($repReservation->price->price, 2) }}</p>
-                            <p><strong>Sous-total:</strong> €{{ number_format($repReservation->price->price * $repReservation->quantity, 2) }}</p>
+                            <p>Cette réservation n'a pas de tickets associés.</p>
                         </div>
                     </div>
-                @endforeach
-            </div>
-            
-            <div class="total-section">
-                <div class="total-line">
-                    <strong>Total payé:</strong>
-                    <strong class="total-amount">€{{ number_format($reservation->total_amount, 2) }}</strong>
                 </div>
-            </div>
+            @endif
         </div>
 
         <!-- Informations de paiement -->

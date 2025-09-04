@@ -41,6 +41,10 @@
             <!-- Sélection des tickets -->
             <div class="form-section">
                 <h3>🎫 Choisir vos tickets</h3>
+                <p class="ticket-instructions">
+                    <strong>💡 Instructions :</strong> Sélectionnez la quantité de tickets que vous souhaitez pour chaque type de prix. 
+                    Vous pouvez choisir 0 ticket pour un type si vous n'en voulez pas, ou plusieurs tickets du même type.
+                </p>
                 <div class="tickets-selection">
                     @foreach($show->prices as $price)
                         <div class="ticket-option">
@@ -51,20 +55,41 @@
                             </div>
                             <div class="quantity-selector">
                                 <label for="tickets_{{ $price->id }}_quantity">Quantité:</label>
-                                <select name="tickets[{{ $price->id }}][quantity]" 
-                                        id="tickets_{{ $price->id }}_quantity"
-                                        class="quantity-select"
-                                        data-price="{{ $price->price }}"
-                                        data-type="{{ $price->type }}">
-                                    <option value="0">0</option>
-                                    @for($i = 1; $i <= 10; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
+                                <div class="quantity-counter">
+                                    <button type="button" 
+                                            class="quantity-btn quantity-minus" 
+                                            data-target="tickets_{{ $price->id }}_quantity"
+                                            data-price="{{ $price->price }}"
+                                            data-type="{{ $price->type }}">
+                                        <span>-</span>
+                                    </button>
+                                    <input type="number" 
+                                           name="tickets[{{ $price->id }}][quantity]" 
+                                           id="tickets_{{ $price->id }}_quantity"
+                                           class="quantity-input"
+                                           value="0"
+                                           min="0"
+                                           max="10"
+                                           data-price="{{ $price->price }}"
+                                           data-type="{{ $price->type }}"
+                                           readonly>
+                                    <button type="button" 
+                                            class="quantity-btn quantity-plus" 
+                                            data-target="tickets_{{ $price->id }}_quantity"
+                                            data-price="{{ $price->price }}"
+                                            data-type="{{ $price->type }}">
+                                        <span>+</span>
+                                    </button>
+                                </div>
                                 <input type="hidden" name="tickets[{{ $price->id }}][price_id]" value="{{ $price->id }}">
                             </div>
                         </div>
                     @endforeach
+                </div>
+                
+                <!-- Message d'aide -->
+                <div class="help-message">
+                    <p>🎯 <strong>Conseil :</strong> Vous devez sélectionner au moins <strong>1 ticket au total</strong> pour pouvoir procéder au paiement.</p>
                 </div>
             </div>
 
@@ -268,55 +293,312 @@
     background: #f8f9fa;
     border-radius: 4px;
 }
+
+/* Instructions et messages d'aide */
+.ticket-instructions {
+    background: #e3f2fd;
+    border: 1px solid #2196f3;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    color: #1565c0;
+}
+
+.help-message {
+    background: #fff3e0;
+    border: 1px solid #ff9800;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    color: #e65100;
+}
+
+/* Résumé de commande amélioré */
+.summary-header {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #007cba;
+}
+
+.summary-header h4 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+}
+
+.summary-header p {
+    margin: 0;
+    color: #666;
+}
+
+.no-tickets {
+    color: #dc3545;
+    font-style: italic;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Sélection de date améliorée */
+.date-option.selected .date-label {
+    background: #007cba;
+    color: white;
+    transform: scale(1.02);
+}
+
+.date-option.selected .date-info strong,
+.date-option.selected .date-info span,
+.date-option.selected .date-info small {
+    color: white;
+}
+
+/* Bouton amélioré */
+.btn-primary:not(:disabled) {
+    background: linear-gradient(135deg, #007cba, #005a87);
+    box-shadow: 0 4px 8px rgba(0, 124, 186, 0.3);
+}
+
+.btn-primary:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 124, 186, 0.4);
+}
+
+/* Compteur de quantités */
+.quantity-counter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.quantity-btn {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #007cba;
+    background: white;
+    color: #007cba;
+    border-radius: 50%;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quantity-btn:hover {
+    background: #007cba;
+    color: white;
+    transform: scale(1.1);
+}
+
+.quantity-btn:active {
+    transform: scale(0.95);
+}
+
+.quantity-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #ccc;
+    border-color: #ccc;
+    color: #666;
+}
+
+.quantity-input {
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #f8f9fa;
+    color: #333;
+}
+
+.quantity-input:focus {
+    outline: none;
+    border-color: #007cba;
+    box-shadow: 0 0 0 3px rgba(0, 124, 186, 0.1);
+}
+
+/* Animation pour les changements de quantité */
+.quantity-input {
+    transition: all 0.3s ease;
+}
+
+.quantity-input.changed {
+    background: #e3f2fd;
+    border-color: #2196f3;
+    transform: scale(1.05);
+}
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const quantitySelects = document.querySelectorAll('.quantity-select');
+    const quantityInputs = document.querySelectorAll('.quantity-input');
     const orderSummary = document.getElementById('order-summary');
     const totalAmount = document.getElementById('total-amount');
     const bookButton = document.getElementById('book-button');
+    const form = document.getElementById('bookingForm');
     
     function updateOrderSummary() {
         let total = 0;
         let hasTickets = false;
         let summaryHTML = '';
+        let totalTickets = 0;
         
-        quantitySelects.forEach(select => {
-            const quantity = parseInt(select.value);
+        quantityInputs.forEach(input => {
+            const quantity = parseInt(input.value);
             if (quantity > 0) {
                 hasTickets = true;
-                const price = parseFloat(select.dataset.price);
-                const type = select.dataset.type;
+                totalTickets += quantity;
+                const price = parseFloat(input.dataset.price);
+                const type = input.dataset.type;
                 const subtotal = price * quantity;
                 total += subtotal;
                 
                 summaryHTML += `
                     <div class="ticket-item">
-                        <span>${type} x${quantity}</span>
-                        <span>€${subtotal.toFixed(2)}</span>
+                        <span><strong>${type}</strong> x${quantity}</span>
+                        <span><strong>€${subtotal.toFixed(2)}</strong></span>
                     </div>
                 `;
             }
         });
         
         if (hasTickets) {
-            orderSummary.innerHTML = summaryHTML;
+            orderSummary.innerHTML = `
+                <div class="summary-header">
+                    <h4>🎫 Résumé de votre sélection</h4>
+                    <p>Total des tickets : <strong>${totalTickets}</strong></p>
+                </div>
+                ${summaryHTML}
+            `;
             totalAmount.textContent = `€${total.toFixed(2)}`;
             bookButton.disabled = false;
+            bookButton.textContent = `💳 Payer €${total.toFixed(2)} avec Stripe`;
         } else {
-            orderSummary.innerHTML = '<p>Aucun ticket sélectionné</p>';
+            orderSummary.innerHTML = '<p class="no-tickets">❌ Aucun ticket sélectionné</p>';
             totalAmount.textContent = '€0.00';
             bookButton.disabled = true;
+            bookButton.textContent = '💳 Payer avec Stripe';
         }
     }
     
-    quantitySelects.forEach(select => {
-        select.addEventListener('change', updateOrderSummary);
+    // Gestion des boutons + et -
+    function setupQuantityButtons() {
+        const minusButtons = document.querySelectorAll('.quantity-minus');
+        const plusButtons = document.querySelectorAll('.quantity-plus');
+        
+        minusButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const targetId = this.dataset.target;
+                const input = document.getElementById(targetId);
+                const currentValue = parseInt(input.value);
+                
+                if (currentValue > 0) {
+                    input.value = currentValue - 1;
+                    updateButtonStates(input);
+                    updateOrderSummary();
+                    animateQuantityChange(input);
+                }
+            });
+        });
+        
+        plusButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const targetId = this.dataset.target;
+                const input = document.getElementById(targetId);
+                const currentValue = parseInt(input.value);
+                
+                if (currentValue < 10) {
+                    input.value = currentValue + 1;
+                    updateButtonStates(input);
+                    updateOrderSummary();
+                    animateQuantityChange(input);
+                }
+            });
+        });
+    }
+    
+    // Mettre à jour l'état des boutons
+    function updateButtonStates(input) {
+        const value = parseInt(input.value);
+        const minusBtn = input.parentElement.querySelector('.quantity-minus');
+        const plusBtn = input.parentElement.querySelector('.quantity-plus');
+        
+        minusBtn.disabled = value <= 0;
+        plusBtn.disabled = value >= 10;
+    }
+    
+    // Animation lors du changement de quantité
+    function animateQuantityChange(input) {
+        input.classList.add('changed');
+        setTimeout(() => {
+            input.classList.remove('changed');
+        }, 300);
+    }
+    
+    // Validation du formulaire
+    function validateForm() {
+        let totalTickets = 0;
+        let hasRepresentation = false;
+        
+        // Vérifier qu'une date est sélectionnée
+        const selectedDate = document.querySelector('input[name="representation_id"]:checked');
+        if (selectedDate) {
+            hasRepresentation = true;
+        }
+        
+        // Compter le total des tickets
+        quantityInputs.forEach(input => {
+            totalTickets += parseInt(input.value);
+        });
+        
+        if (!hasRepresentation) {
+            alert('⚠️ Veuillez sélectionner une date pour le spectacle.');
+            return false;
+        }
+        
+        if (totalTickets === 0) {
+            alert('⚠️ Veuillez sélectionner au moins 1 ticket.');
+            return false;
+        }
+        
+        return true;
+    }
+    
+    // Validation avant soumission
+    form.addEventListener('submit', function(e) {
+        if (!validateForm()) {
+            e.preventDefault();
+        }
+    });
+    
+    // Initialiser les boutons de quantité
+    setupQuantityButtons();
+    
+    // Initialiser l'état des boutons
+    quantityInputs.forEach(input => {
+        updateButtonStates(input);
     });
     
     // Initialiser le résumé
     updateOrderSummary();
+    
+    // Améliorer l'expérience utilisateur
+    const dateRadios = document.querySelectorAll('.date-radio');
+    dateRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Mettre à jour le style de la date sélectionnée
+            dateRadios.forEach(r => {
+                r.closest('.date-option').classList.remove('selected');
+            });
+            this.closest('.date-option').classList.add('selected');
+        });
+    });
 });
 </script>
 @endsection

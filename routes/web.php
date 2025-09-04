@@ -69,9 +69,11 @@ Route::put('/types/{id}', [TypeController::class, 'update'])->name('type.update'
 Route::get('/shows', [ShowController::class, 'index'])->name('show.index');
 Route::get('/shows/{id}', [ShowController::class, 'show'])->name('show.show');
 
-// BOOKING
-Route::get('/booking/{showId}', [App\Http\Controllers\BookingController::class, 'showBookingForm'])->name('booking.form');
-Route::get('/booking/confirmation/{reservationId}', [App\Http\Controllers\BookingController::class, 'confirmation'])->name('booking.confirmation');
+// BOOKING (protégé par authentification)
+Route::middleware('auth')->group(function () {
+    Route::get('/booking/{showId}', [App\Http\Controllers\BookingController::class, 'showBookingForm'])->name('booking.form');
+    Route::get('/booking/confirmation/{reservationId}', [App\Http\Controllers\BookingController::class, 'confirmation'])->name('booking.confirmation');
+});
 
 // PAYMENT
 Route::post('/payment/create', [App\Http\Controllers\PaymentController::class, 'createPaymentSession'])->name('payment.create');

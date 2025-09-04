@@ -32,7 +32,7 @@ class PaymentController extends Controller
             'representation_id' => 'required|exists:representations,id',
             'tickets' => 'required|array|min:1',
             'tickets.*.price_id' => 'required|exists:prices,id',
-            'tickets.*.quantity' => 'required|integer|min:1|max:10',
+            'tickets.*.quantity' => 'required|integer|min:0|max:10',
         ]);
 
         // Vérifier que l'utilisateur est connecté

@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\DB;
 
 class BookingController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Afficher le formulaire de réservation pour un spectacle
      */

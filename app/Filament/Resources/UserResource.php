@@ -27,8 +27,12 @@ class UserResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\TextInput::make('name')->required(),
-            //Forms\Components\TextInput::make('login')->required(),
+            Forms\Components\TextInput::make('firstname')
+                ->label('Prénom')
+                ->required(),
+            Forms\Components\TextInput::make('lastname')
+                ->label('Nom')
+                ->required(),
             Forms\Components\TextInput::make('email')->email()->required(),
             Forms\Components\Toggle::make('is_admin')->label('Administrateur'),
             Forms\Components\TextInput::make('password')
@@ -45,9 +49,21 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('email')->sortable()->searchable(),
-                Tables\Columns\IconColumn::make('is_admin')->boolean()->label('Admin'),
+                Tables\Columns\TextColumn::make('firstname')
+                    ->label('Prénom')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('lastname')
+                    ->label('Nom')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->label('Email')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\IconColumn::make('is_admin')
+                    ->boolean()
+                    ->label('Admin'),
             ])
             ->filters([
                 //

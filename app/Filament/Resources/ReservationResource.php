@@ -27,7 +27,8 @@ class ReservationResource extends Resource
     {
         return $form->schema([
             Forms\Components\Select::make('user_id')
-                ->relationship('user', 'email')
+                ->relationship('user', 'firstname')
+                ->getOptionLabelFromRecordUsing(fn ($record) => "{$record->firstname} {$record->lastname} ({$record->email})")
                 ->label('Utilisateur')
                 ->required(),
 
@@ -50,7 +51,15 @@ class ReservationResource extends Resource
     public static function table(Table $table): Table
     {
         return $table->columns([
-            Tables\Columns\TextColumn::make('user.name')->label('Utilisateur'),
+            Tables\Columns\TextColumn::make('user.firstname')
+                ->label('Prénom')
+                ->searchable(),
+            Tables\Columns\TextColumn::make('user.lastname')
+                ->label('Nom')
+                ->searchable(),
+            Tables\Columns\TextColumn::make('user.email')
+                ->label('Email')
+                ->searchable(),
             Tables\Columns\TextColumn::make('user.id')->label('Matricule'),
             Tables\Columns\TextColumn::make('booking_date')->label('Date')->dateTime('d/m/Y H:i'),
             Tables\Columns\TextColumn::make('status')->label('Statut'),

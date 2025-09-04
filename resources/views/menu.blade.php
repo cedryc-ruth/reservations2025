@@ -18,6 +18,9 @@
         <li><a href="/artists">Nos talents</a></li>
         <li><a href="/types">Nos métiers</a></li>
         <li><a href="/locations">Nos salles</a></li>
+        @if (Auth::check())
+        <li><a href="/my-reservations">🎫 Mes réservations</a></li>
+        @endif
 
     </ul>
 </nav>

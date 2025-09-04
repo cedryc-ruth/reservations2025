@@ -79,6 +79,14 @@ Route::get('/payment/success/{reservation}', [App\Http\Controllers\PaymentContro
 Route::get('/payment/cancel/{reservation}', [App\Http\Controllers\PaymentController::class, 'paymentCancel'])->name('payment.cancel');
 Route::post('/payment/webhook', [App\Http\Controllers\PaymentController::class, 'webhook'])->name('payment.webhook');
 
+// USER RESERVATIONS
+Route::middleware('auth')->group(function () {
+    Route::get('/my-reservations', [App\Http\Controllers\UserReservationController::class, 'index'])->name('user-reservations.index');
+    Route::get('/my-reservations/{id}', [App\Http\Controllers\UserReservationController::class, 'show'])->name('user-reservations.show');
+    Route::post('/my-reservations/{id}/cancel', [App\Http\Controllers\UserReservationController::class, 'cancel'])->name('user-reservations.cancel');
+    Route::get('/my-reservations/{id}/download-ticket', [App\Http\Controllers\UserReservationController::class, 'downloadTicket'])->name('user-reservations.download-ticket');
+});
+
 
 // LOCATIONS
 Route::get('/locations', [LocationController::class, 'index'])->name('location.index');

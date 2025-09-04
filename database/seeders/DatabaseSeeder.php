@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             LocationSeeder::class,
             ShowSeeder::class,
             ArtistTypeShowSeeder::class,
+            PriceShowSeeder::class,
             RepresentationSeeder::class,
             ReservationSeeder::class,
             RepresentationReservationSeeder::class,

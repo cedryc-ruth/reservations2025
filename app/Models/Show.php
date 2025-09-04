@@ -52,9 +52,9 @@ class Show extends Model implements Feedable
     /**
      * Renvoie tous les tarifs d'un spectacle
      */
-    public function prices(): BelongsTo
+    public function prices(): BelongsToMany
     {
-        return $this->belongsTo(Price::class);
+        return $this->belongsToMany(Price::class, 'price_show');
     }
 
     public function representations() :HasMany

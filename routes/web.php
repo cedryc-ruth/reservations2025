@@ -69,6 +69,11 @@ Route::put('/types/{id}', [TypeController::class, 'update'])->name('type.update'
 Route::get('/shows', [ShowController::class, 'index'])->name('show.index');
 Route::get('/shows/{id}', [ShowController::class, 'show'])->name('show.show');
 
+// BOOKING
+Route::get('/booking/{showId}', [App\Http\Controllers\BookingController::class, 'showBookingForm'])->name('booking.form');
+Route::post('/booking', [App\Http\Controllers\BookingController::class, 'processBooking'])->name('booking.process');
+Route::get('/booking/confirmation/{reservationId}', [App\Http\Controllers\BookingController::class, 'confirmation'])->name('booking.confirmation');
+
 
 // LOCATIONS
 Route::get('/locations', [LocationController::class, 'index'])->name('location.index');

@@ -15,6 +15,22 @@
 
     <p>{{ $show->description }}</p>
 
+    <!-- Bouton de réservation -->
+    @if($show->bookable)
+        <div class="booking-section" style="margin: 2rem 0; padding: 1.5rem; background: #e8f5e8; border-radius: 8px; text-align: center;">
+            <h3>🎫 Réserver vos places</h3>
+            <p>Choisissez votre date et vos tickets pour ce spectacle</p>
+            <a href="{{ route('booking.form', $show->id) }}" class="btn btn-primary" style="display: inline-block; padding: 1rem 2rem; background: #007cba; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 1rem;">
+                Réserver maintenant
+            </a>
+        </div>
+    @else
+        <div class="booking-section" style="margin: 2rem 0; padding: 1.5rem; background: #fff3cd; border-radius: 8px; text-align: center;">
+            <h3>🚫 Réservation non disponible</h3>
+            <p>Ce spectacle n'est actuellement pas réservable</p>
+        </div>
+    @endif
+
     <!-- Informations sur les artistes -->
     @if($show->artistTypes->count() > 0)
         <h3>Artistes</h3>

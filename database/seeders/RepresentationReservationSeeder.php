@@ -12,18 +12,21 @@ class RepresentationReservationSeeder extends Seeder
         RepresentationReservation::create([
             'representation_id' => 1,
             'reservation_id' => 1,
+            'price_id' => 1,
             'seats' => 2,
         ]);
 
         RepresentationReservation::create([
             'representation_id' => 2,
             'reservation_id' => 2,
+            'price_id' => 1,
             'seats' => 1,
         ]);
 
         RepresentationReservation::create([
             'representation_id' => 3,
             'reservation_id' => 3,
+            'price_id' => 2,
             'seats' => 3,
         ]);
     }
